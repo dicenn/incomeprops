@@ -4,21 +4,28 @@ console.log("cash_flow_calc.js loaded");
 function updateCashFlowAnalysisTable() {
     console.log("Updating Cash Flow Analysis Table..."); // Debugging statement
     // Recalculate totalRent first
-    let unitInputs = document.querySelectorAll(".units");
-    let rentPerUnitInputs = document.querySelectorAll(".rent-per-unit");
-    let newTotalRent = 0;
+    let totalUnits = calculateTotal(".units");
+    let totalRent = 0;
 
-    for (let i = 0; i < unitInputs.length; i++) {
-        let units = parseFloat(unitInputs[i].value) || 0; // if not a number, default to 0
-        let rentPerUnit = parseFloat(rentPerUnitInputs[i].value) || 0;
+    let rentRows = document.querySelectorAll(".rent-row");
+    rentRows.forEach(row => {
+        let unitsInput = row.querySelector(".units");
+        let rentPerUnitInput = row.querySelector(".rent-per-unit");
+        
+        let units = parseFloat(unitsInput.value) || 0;
+        let rentPerUnit = parseFloat(rentPerUnitInput.value) || 0;
         let totalRentForType = units * rentPerUnit;
 
-        document.querySelectorAll(".total-rent")[i].textContent = totalRentForType.toFixed(2);
-        newTotalRent += totalRentForType;
-    }
+        // If units is 0, reset the rent value to blank
+        if (!units) {
+            rentPerUnitInput.value = '';
+        }
 
-    document.getElementById("totalRent").textContent = newTotalRent.toFixed(2);
-    totalRent = newTotalRent;  // Update the global totalRent variable
+        row.querySelector(".total-rent").textContent = units ? totalRentForType.toFixed(2) : '';
+        totalRent += totalRentForType;
+    });
+
+    document.getElementById("totalRent").textContent = totalRent.toFixed(2);
     document.getElementById("monthlyRent").value = totalRent.toFixed(2);
 
     // Pull values and compute as earlier
@@ -197,4 +204,9 @@ function calculatePropertyMetrics(property) {
         capRate: capRate,
         monthlyCashFlow: monthlyCashFlow
     };
+}
+
+function calculateTotal(selector) {
+    let inputs = document.querySelectorAll(selector);
+    return [...inputs].reduce((acc, input) => acc + (parseFloat(input.value) || 0), 0);
 }

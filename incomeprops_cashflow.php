@@ -69,18 +69,6 @@
     ];    
 ?>
 
-<!-- Filter to choose which property to look at -->
-<!-- <form action="incomeprops_cashflow.php" method="GET">
-    <label for="addressSelect">Choose a Property:</label>
-    <select name="address" id="addressSelect" onchange="this.form.submit()">
-        <?php foreach ($addresses as $addr): ?>
-            <option value="<?= $addr['Address'] ?>" <?= (isset($address) && $address == $addr['Address']) ? 'selected' : '' ?>>
-                <?= $addr['Address'] ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-</form> -->
-
 <!-- units + rent table -->
 <table>
     <tr>
@@ -97,24 +85,18 @@
     foreach ($bedroomTypes as $key => $label): 
         $unitsValue = $property[$key . '_bedroom_units'];
         $rentValue = $property[$key . '_bedroom_rent'];
+        $formattedTotalRent = $unitsValue * $rentValue;
 
-        if ($unitsValue != 0) {
-            $totalUnits += $unitsValue;
-            $totalRent += $unitsValue * $rentValue;
-            $formattedRentValue = $rentValue;
-            $formattedTotalRent = $unitsValue * $rentValue;
-        } else {
-            $formattedRentValue = "";
-            $formattedTotalRent = "";
-        }
-        ?>
+        $totalUnits += $unitsValue;
+        $totalRent += $formattedTotalRent;
+    ?>
 
-        <tr class="rent-row">
-            <td><?= $label ?></td>
-            <td><input type="number" class="units" value="<?= $unitsValue ?>" onchange="updateCashFlowAnalysisTable()"></td>
-            <td><input type="number" class="rent-per-unit" value="<?= $formattedRentValue ?>" onchange="updateCashFlowAnalysisTable()"></td>
-            <td class="total-rent"><?= $formattedTotalRent ?></td>
-        </tr>
+    <tr class="rent-row">
+        <td><?= $label ?></td>
+        <td><input type="number" class="units" value="<?= $unitsValue ?: '' ?>" onchange="updateCashFlowAnalysisTable()"></td>
+        <td><input type="number" class="rent-per-unit" value="<?= $unitsValue ? $rentValue : '' ?>" onchange="updateCashFlowAnalysisTable()"></td>
+        <td class="total-rent"><?= $formattedTotalRent ?: '' ?></td>
+    </tr>
 
     <?php endforeach; ?>
 

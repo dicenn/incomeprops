@@ -14,14 +14,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Attach event listeners to all input fields
         let formFields = document.querySelectorAll("#financialAnalysisForm input");
-        console.log("Fetched form fields:", formFields);
         
         formFields.forEach(field => {
-            field.addEventListener("input", function() {
-                console.log("Input changed:", field.id, field.value);
-                updateCashFlowAnalysisTable();
-            });
-        });
+            field.addEventListener("input", updateCashFlowAnalysisTable);
+        });        
 
         // Call the update function initially
         updateCashFlowAnalysisTable();
