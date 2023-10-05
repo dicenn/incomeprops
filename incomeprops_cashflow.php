@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Property cash flow analysis</title>
+    <!-- CSS styles -->
+    <link rel="stylesheet" type="text/css" href="ip_styles.css">
 </head>
 <body data-page="cashflow">
 
@@ -37,14 +39,10 @@
 </script>
 
 <!-- photos section -->
-<div style="display: flex; gap: 2rem; align-items: flex-start;">
-    <div class="photos-section" style="flex: 0 0 auto; max-width: 300px;"> <!-- Make photo smaller and restrict width -->
-        <img id="currentPhoto" src="<?= $property['Pic1'] ?>" style="width: 100%; height: auto;">
-        <div style="text-align: center; margin-top: 1rem;">
-            <button onclick="prevPhoto()">Prev</button>
-            <button onclick="nextPhoto()">Next</button>
-        </div>
-    </div>
+<div class="photos-section">
+    <img id="currentPhoto" src="<?= $property['Pic1'] ?>">
+    <button class="photo-nav prev" onclick="prevPhoto()">&#8592;</button>
+    <button class="photo-nav next" onclick="nextPhoto()">&#8594;</button>
 </div>
 
 <!-- property summary section -->
