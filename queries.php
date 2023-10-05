@@ -14,7 +14,18 @@ function getProperties($num_units = "all", $min_price = null, $max_price = null,
     if (!empty($max_price)) {$query .= " AND Price <= $max_price";}
     if (!empty($city) && strtolower($city) !== "all") {$query .= " AND city = '$city'";}
 
-    echo $query; // print the constructed query
+    $sort = isset($_POST['sort']) ? $_POST['sort'] : null;
+    
+    // if ($sort) {
+    //     switch ($sort) {
+    //         case 'price_high_low': $query .= " ORDER BY Price DESC"; break;
+    //         case 'price_low_high': $query .= " ORDER BY Price ASC"; break;
+    //         // case 'return_high_low': $query .= " ORDER BY annual_return DESC"; break;
+    //         // case 'return_low_high': $query .= " ORDER BY annual_return ASC"; break;
+    //     }
+    // }    
+
+    // echo $query;
 
     $result = mysqli_query($conn, $query);
 

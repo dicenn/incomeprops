@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet"> -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Income Properties</title>
@@ -95,7 +95,8 @@
         }
 
         body {
-            font-family: 'Nunito', sans-serif;
+            /* font-family: 'Nunito', sans-serif; */
+            font-family: 'Tahoma'
         }
 
         .header-band {
@@ -152,6 +153,67 @@
             margin-left: 5px; 
         }
 
+        .filters-band {
+            background-color: #f4faff;
+            padding: 10px 0 30px 0; /* increased bottom padding to 30px */
+            display: flex;
+            justify-content: center; /* centers the form horizontally */
+        }
+
+        .filters-form {
+            display: flex;
+            align-items: center; /* vertically aligns items in the center */
+            gap: 10px; /* space between filter items */
+        }
+
+        .filter-item {
+            position: relative; /* allows absolute positioning of children */
+            display: flex;
+            flex-direction: column; /* stack label under input */
+            align-items: center; /* center items horizontally */
+        }
+
+        .filter-input {
+            background-color: white;
+            border: none;
+            border-radius: 25px; /* pill shape */
+            padding: 5px 15px; /* padding for a comfortable size */
+            outline: none; /* remove the blue outline */
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Optional: subtle drop shadow */
+        }
+
+        .filter-input[type="submit"] {
+            background-color: #18466f;
+            color: white;
+            cursor: pointer; /* indicate it's clickable */
+            transition: background-color 0.3s; /* smoothens the hover effect */
+        }
+
+        .filter-input[type="submit"]:hover {
+            background-color: #0f3555; /* slightly darker shade on hover */
+        }
+
+        .filter-item label {
+            font-size: 0.8em; /* smaller font */
+            position: absolute;
+            bottom: -20px; /* adjust based on desired distance from input */
+            left: 50%;
+            transform: translateX(-50%); /* centers label */
+        }
+        .filter-clear {
+            background-color: #e0e0e0;
+            border: none;
+            border-radius: 25px;
+            padding: 5px 15px;
+            color: #333;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .filter-clear:hover {
+            background-color: #d0d0d0;
+        }
     </style>
 </head>
 <body data-page="landing">
@@ -189,20 +251,52 @@
     closeConnection();
 ?>
 
-<form method="post">
-    Min # of Units: <input type="text" name="num_units" value="<?= isset($_POST['num_units']) ? htmlspecialchars($_POST['num_units']) : '' ?>"><br>
-    Min Price: <input type="text" name="min_price" value="<?= isset($_POST['min_price']) ? htmlspecialchars($_POST['min_price']) : '' ?>"><br>
-    Max Price: <input type="text" name="max_price" value="<?= isset($_POST['max_price']) ? htmlspecialchars($_POST['max_price']) : '' ?>"><br>
-    City: <select name="city">
-        <option value="all">All</option>
-        <?php foreach($citiesList as $cityItem): ?>
-            <option value="<?= $cityItem ?>" <?= (isset($_POST['city']) && $_POST['city'] == $cityItem) ? 'selected' : '' ?>><?= $cityItem ?></option>
-        <?php endforeach; ?>
-    </select><br>
-    <input type="submit" value="Filter Properties">
-</form>
+<!-- user filter header -->
+<div class="filters-band">
+    <form method="post" class="filters-form">
+        <div class="filter-item">
+            <input type="text" name="num_units" class="filter-input" value="<?= isset($_POST['num_units']) ? htmlspecialchars($_POST['num_units']) : '' ?>">
+            <label>Min # of Units</label>
+        </div>
+        <div class="filter-item">
+            <input type="text" name="min_price" class="filter-input" value="<?= isset($_POST['min_price']) ? htmlspecialchars($_POST['min_price']) : '' ?>">
+            <label>Min Price</label>
+        </div>
+        <div class="filter-item">
+            <input type="text" name="max_price" class="filter-input" value="<?= isset($_POST['max_price']) ? htmlspecialchars($_POST['max_price']) : '' ?>">
+            <label>Max Price</label>
+        </div>
+        <div class="filter-item">
+            <select name="city" class="filter-input">
+                <option value="all" <?= (isset($_POST['city']) && $_POST['city'] == 'all') ? 'selected' : '' ?>>All</option>
+                <?php foreach($citiesList as $cityItem): ?>
+                    <option value="<?= $cityItem ?>" <?= (isset($_POST['city']) && $_POST['city'] == $cityItem) ? 'selected' : '' ?>><?= $cityItem ?></option>
+                <?php endforeach; ?>
+            </select>
+            <label>City</label>
+        </div>
+        <div class="filter-item filter-submit">
+            <input type="submit" class="filter-input" value="Filter Properties">
+        </div>
+        <button type="button" class="filter-clear" onclick="window.location.href='http://localhost:8888/incomeprops/incomeprops_landing.php'">Clear Filters</button>
+    </form>
+</div>
 
+<!-- show the number of properties returned from the database -->
+<?php
+    echo '<div class="results-count">Total Properties Found: ' . count($properties) . '</div>';
+?>
 
+<!-- sort the page by highest to lowest price, etc... ; to be developd later-->
+<!-- <label for="sort">Sort By:</label>
+<select name="sort" id="sort">
+    <option value="price_high_low">Price: High to Low</option>
+    <option value="price_low_high">Price: Low to High</option>
+    <option value="return_high_low">Annual Return: High to Low</option>
+    <option value="return_low_high">Annual Return: Low to High</option>
+</select> -->
+
+<!-- set up an array that is passed to the calculatePropertyMetrics function which calculates the invesmment summary stats -->
 <script>
     let propertiesArray = <?php echo json_encode($properties); ?>;
 </script>
@@ -260,6 +354,7 @@
     <?php endforeach; ?>
 </div>
 
+<!-- link to packages and files that the landing page deoends on -->
 <script src="https://cdn.jsdelivr.net/npm/financejs@4.1.0/finance.js"></script>
 <script src="cash_flow_calc.js"></script>
 <script src="listener.js"></script>

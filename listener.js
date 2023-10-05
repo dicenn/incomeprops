@@ -48,11 +48,8 @@ document.addEventListener("DOMContentLoaded", function() {
                     maximumFractionDigits: 0
                 }).format(metrics.monthlyCashFlow);
                 
-                propertyContainer.querySelector('.values-row .monthly-cash-flow').textContent = formattedMonthlyCashFlow;
-                
+                propertyContainer.querySelector('.values-row .monthly-cash-flow').textContent = formattedMonthlyCashFlow;   
             }
-            
         });
     }
-    
 });
