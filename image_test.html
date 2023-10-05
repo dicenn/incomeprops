@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Stretch Test</title>
+    <style>
+        .property {
+            width: 200px;
+            height: 150px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .property img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+            min-height: 150px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+
+<div class="property">
+    <img src="https://cdn.realtor.ca/listings/TS638300163322730000/reb82/medres/6/c6805746_1.jpg" alt="Property Image">
+</div>
+
+</body>
+</html>
