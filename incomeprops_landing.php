@@ -7,6 +7,12 @@
     <title>Income Properties</title>
     <!-- CSS styles -->
     <style>
+        .site-name-link {
+            text-decoration: none; /* Removes underline */
+            color: inherit; /* Uses the parent color, making it consistent with the rest of the header */
+            cursor: pointer; /* Optional: Just to indicate it's clickable */
+        }
+
         .property {
             width: 220px;
             margin: 20px;  /* Increased margin */
@@ -152,7 +158,9 @@
 
 <!-- site header -->
 <div class="header-band">
-    <div class="site-name">incomeprops.ca</div>
+    <div class="site-name">
+        <a href="http://localhost:8888/incomeprops/incomeprops_landing.php" class="site-name-link">incomeprops.ca</a>
+    </div>
     <div class="nav-links">
         <a href="#">Properties</a>
         <a href="#">Blog</a>
@@ -166,21 +174,34 @@
 <?php
     include 'queries.php';
 
-    $properties = getProperties();
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $num_units = isset($_POST['num_units']) ? $_POST['num_units'] : "all";
+        $min_price = isset($_POST['min_price']) ? $_POST['min_price'] : null;
+        $max_price = isset($_POST['max_price']) ? $_POST['max_price'] : null;
+        $city = isset($_POST['city']) ? $_POST['city'] : null;
+    
+        $properties = getProperties($num_units, $min_price, $max_price, $city);
+    } else {
+        $properties = getProperties();
+    }    
+
+    $citiesList = getDistinctCities();
     closeConnection();
 ?>
 
-<form action="filtered_properties.php" method="post">
-    # of Units: <input type="text" name="num_units"><br>
-    Min Price: <input type="text" name="min_price"><br>
-    Max Price: <input type="text" name="max_price"><br>
+<form method="post">
+    Min # of Units: <input type="text" name="num_units" value="<?= isset($_POST['num_units']) ? htmlspecialchars($_POST['num_units']) : '' ?>"><br>
+    Min Price: <input type="text" name="min_price" value="<?= isset($_POST['min_price']) ? htmlspecialchars($_POST['min_price']) : '' ?>"><br>
+    Max Price: <input type="text" name="max_price" value="<?= isset($_POST['max_price']) ? htmlspecialchars($_POST['max_price']) : '' ?>"><br>
     City: <select name="city">
-        <option value="city1">City 1</option>
-        <option value="city2">City 2</option>
-        <!-- Add other cities -->
+        <option value="all">All</option>
+        <?php foreach($citiesList as $cityItem): ?>
+            <option value="<?= $cityItem ?>" <?= (isset($_POST['city']) && $_POST['city'] == $cityItem) ? 'selected' : '' ?>><?= $cityItem ?></option>
+        <?php endforeach; ?>
     </select><br>
     <input type="submit" value="Filter Properties">
 </form>
+
 
 <script>
     let propertiesArray = <?php echo json_encode($properties); ?>;
@@ -191,7 +212,7 @@
     <?php 
         foreach ($properties as $property):
             $encodedAddress = urlencode($property['Address']);
-            echo "<script>console.log('PHP encoded: $encodedAddress');</script>";
+            // echo "<script>console.log('PHP encoded: $encodedAddress');</script>";
     ?>
         <div class="property" data-address="<?= urlencode($property['Address']) ?>">
             <!-- Make the entire image container a link -->

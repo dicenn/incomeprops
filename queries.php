@@ -3,10 +3,19 @@
 
 include 'config.php';
 
-function getProperties() {
+function getProperties($num_units = "all", $min_price = null, $max_price = null, $city = null) {
     global $conn;
     $properties = array();
-    $query = "SELECT * FROM income_props.toronto_duplexes_lean_v8";
+
+    $query = "SELECT * FROM income_props.toronto_duplexes_lean_v8 WHERE 1=1";  // "WHERE 1=1" is a trick to avoid dealing with leading "AND"s
+
+    if (!empty($num_units) && $num_units !== "all") { $query .= " AND num_units >= '$num_units'";}
+    if (!empty($min_price)) { $query .= " AND Price >= $min_price";}
+    if (!empty($max_price)) {$query .= " AND Price <= $max_price";}
+    if (!empty($city) && strtolower($city) !== "all") {$query .= " AND city = '$city'";}
+
+    echo $query; // print the constructed query
+
     $result = mysqli_query($conn, $query);
 
     if (!$result) {
@@ -53,6 +62,17 @@ function getAddresses() {
 function closeConnection() {
     global $conn;
     mysqli_close($conn);
+}
+
+function getDistinctCities() {
+    global $conn;
+    $sql = "SELECT DISTINCT city FROM income_props.toronto_duplexes_lean_v8";
+    $result = $conn->query($sql);
+    $cities = [];
+    while ($row = $result->fetch_assoc()) {
+        $cities[] = $row['city'];
+    }
+    return $cities;
 }
 
 ?>

@@ -29,12 +29,12 @@ document.addEventListener("DOMContentLoaded", function() {
     else if (bodyDataPage === "landing") {
         propertiesArray.forEach((property) => {
             let encodedAddressJs = encodeURIComponent(property.Address).replace(/%20/g, '+');
-            console.log("JavaScript encoded:", encodedAddressJs);
+            // console.log("JavaScript encoded:", encodedAddressJs);
             let metrics = calculatePropertyMetrics(property);
-            console.log("Metrics for:", property.Address, metrics);
+            // console.log("Metrics for:", property.Address, metrics);
 
             let propertyContainer = document.querySelector(`.property[data-address="${encodedAddressJs}"]`);
-            console.log("Container for", property.Address, propertyContainer);
+            // console.log("Container for", property.Address, propertyContainer);
 
             if (propertyContainer) {
                 // Update the displayed stats
