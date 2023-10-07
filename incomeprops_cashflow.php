@@ -57,16 +57,6 @@
     </section>
 </div>
 
-<!-- set up fields / rows for the unit + rent table -->
-<?php
-    $bedroomTypes = [
-        "3" => "3 bdrms",
-        "2" => "2 bdrms",
-        "1" => "1 bdrms",
-        "0" => "Bachelors"
-    ];    
-?>
-
 <!-- units + rent table -->
 <table>
     <tr>
@@ -76,27 +66,35 @@
         <th>Total Rent</th>
     </tr>
 
-    <?php 
-    $totalUnits = 0;
-    $totalRent = 0;
-
-    foreach ($bedroomTypes as $key => $label): 
-        $unitsValue = $property[$key . '_bedroom_units'];
-        $rentValue = $property[$key . '_bedroom_rent'];
-        $formattedTotalRent = $unitsValue * $rentValue;
-
-        $totalUnits += $unitsValue;
-        $totalRent += $formattedTotalRent;
-    ?>
+    <?php $totalUnits = 0; $totalRent = 0; ?>
 
     <tr class="rent-row">
-        <td><?= $label ?></td>
-        <td><input type="number" class="units" value="<?= $unitsValue ?: '' ?>" onchange="updateCashFlowAnalysisTable()"></td>
-        <td><input type="number" class="rent-per-unit" value="<?= $unitsValue ? $rentValue : '' ?>" onchange="updateCashFlowAnalysisTable()"></td>
-        <td class="total-rent"><?= $formattedTotalRent ?: '' ?></td>
+        <td>3 bdrms</td>
+        <td><input type="number" class="units" value="<?= $property['3_bedroom_units'] ?: '' ?>" onchange="updateCashFlowAnalysisTable()"></td>
+        <td><input type="number" class="rent-per-unit" value="<?= $property['3_bedroom_units'] ? $property['3_bedroom_rent'] : '' ?>" onchange="updateCashFlowAnalysisTable()"></td>
+        <td class="total-rent"><?= ($totalRent += $property['3_bedroom_units'] * $property['3_bedroom_rent']) ?: '' ?></td>
     </tr>
 
-    <?php endforeach; ?>
+    <tr class="rent-row">
+        <td>2 bdrms</td>
+        <td><input type="number" class="units" value="<?= $property['2_bedroom_units'] ?: '' ?>" onchange="updateCashFlowAnalysisTable()"></td>
+        <td><input type="number" class="rent-per-unit" value="<?= $property['2_bedroom_units'] ? $property['2_bedroom_rent'] : '' ?>" onchange="updateCashFlowAnalysisTable()"></td>
+        <td class="total-rent"><?= ($totalRent += $property['2_bedroom_units'] * $property['2_bedroom_rent']) ?: '' ?></td>
+    </tr>
+
+    <tr class="rent-row">
+        <td>1 bdrms</td>
+        <td><input type="number" class="units" value="<?= $property['1_bedroom_units'] ?: '' ?>" onchange="updateCashFlowAnalysisTable()"></td>
+        <td><input type="number" class="rent-per-unit" value="<?= $property['1_bedroom_units'] ? $property['1_bedroom_rent'] : '' ?>" onchange="updateCashFlowAnalysisTable()"></td>
+        <td class="total-rent"><?= ($totalRent += $property['1_bedroom_units'] * $property['1_bedroom_rent']) ?: '' ?></td>
+    </tr>
+
+    <tr class="rent-row">
+        <td>Bachelors</td>
+        <td><input type="number" class="units" value="<?= $property['0_bedroom_units'] ?: '' ?>" onchange="updateCashFlowAnalysisTable()"></td>
+        <td><input type="number" class="rent-per-unit" value="<?= $property['0_bedroom_units'] ? $property['0_bedroom_rent'] : '' ?>" onchange="updateCashFlowAnalysisTable()"></td>
+        <td class="total-rent"><?= ($totalRent += $property['0_bedroom_units'] * $property['0_bedroom_rent']) ?: '' ?></td>
+    </tr>
 
     <!-- Totals Row -->
     <tr>

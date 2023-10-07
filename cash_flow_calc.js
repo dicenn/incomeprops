@@ -3,25 +3,17 @@ console.log("cash_flow_calc.js loaded");
 
 function updateCashFlowAnalysisTable() {
     console.log("Updating Cash Flow Analysis Table..."); // Debugging statement
-    // Recalculate totalRent first
-    let totalUnits = calculateTotal(".units");
     let totalRent = 0;
 
-    let rentRows = document.querySelectorAll(".rent-row");
-    rentRows.forEach(row => {
-        let unitsInput = row.querySelector(".units");
+    document.querySelectorAll(".rent-row").forEach(row => {
+        let units = parseFloat(row.querySelector(".units").value) || 0;
         let rentPerUnitInput = row.querySelector(".rent-per-unit");
-        
-        let units = parseFloat(unitsInput.value) || 0;
         let rentPerUnit = parseFloat(rentPerUnitInput.value) || 0;
         let totalRentForType = units * rentPerUnit;
 
-        // If units is 0, reset the rent value to blank
-        if (!units) {
-            rentPerUnitInput.value = '';
-        }
-
+        rentPerUnitInput.value = units ? rentPerUnit : '';
         row.querySelector(".total-rent").textContent = units ? totalRentForType.toFixed(2) : '';
+        
         totalRent += totalRentForType;
     });
 
