@@ -94,11 +94,11 @@ function updateCashFlowAnalysisTable() {
     }
 
     // updating the investment summary table
+    document.getElementById('noiValue').textContent = formatCurrency(noi);
+    document.getElementById('monthlyCashFlowValue').textContent = formatCurrency(monthlyCashFlow);
+    document.getElementById('initialInvestmentValue').textContent = formatCurrency(initialInvestment);
     document.getElementById('irrValue').textContent = `${irr.toFixed(1)}%`;
-    document.getElementById('noiValue').textContent = `$${noi.toFixed(0)}`;
     document.getElementById('capRateValue').textContent = `${(capRate * 100).toFixed(1)}%`;
-    document.getElementById('monthlyCashFlowValue').textContent = `$${monthlyCashFlow.toFixed(0)}`;
-    document.getElementById('initialInvestmentValue').textContent = `$${initialInvestment.toFixed(0)}`;
 }
 
 // pmt function for calculating the annual mortgage payment
@@ -201,4 +201,18 @@ function calculatePropertyMetrics(property) {
 function calculateTotal(selector) {
     let inputs = document.querySelectorAll(selector);
     return [...inputs].reduce((acc, input) => acc + (parseFloat(input.value) || 0), 0);
+}
+
+function formatCurrency(value) {
+    // Ensure the value is a number
+    const num = parseFloat(value);
+    
+    // Check if it's NaN (Not a Number)
+    if (isNaN(num)) return value;
+
+    // Convert the number to a string with thousands separators and no decimal places
+    let formatted = Math.abs(num).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+
+    // Add the dollar sign, and a minus sign before the dollar sign if it's negative
+    return num < 0 ? '-$' + formatted : '$' + formatted;
 }

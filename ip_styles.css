@@ -1,3 +1,4 @@
+/* Styles created for the landing page formatting */
 .site-name-link {
     text-decoration: none; /* Removes underline */
     color: inherit; /* Uses the parent color, making it consistent with the rest of the header */
@@ -206,6 +207,7 @@ body {
     background-color: #d0d0d0;
 }
 
+/* Styles created for the detail page formatting */
 .photos-section {
     position: relative;
     width: 350px;
@@ -237,4 +239,81 @@ body {
 
 .photo-nav.next {
     right: 10px;
+}
+
+.property-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(19, 66, 108, 0.7); /* Color #13426c with some transparency */
+    color: #FFF;
+    padding: 5px 10px;
+    font-size: 0.8rem; /* Reduced font size */
+    text-align: center;
+    border-radius: 0; /* Removing border radius to make it flush with the edges */
+}
+
+.property-info span {
+    margin: 0 5px;
+}
+
+/* CSS for property price */
+.property-price-cashflow {
+    color: #13426c; /* Same color as the transparent box */
+    font-size: 2.5rem; /* Big font size for prominence */
+    font-weight: bold; /* Making it bold for added prominence */
+    margin-bottom: 10px; /* Space between price and address, adjust as needed */
+}
+
+/* CSS for property address */
+.property-address-cashflow {
+    color: black;
+    font-size: 1.2rem; 
+    font-weight: bold;
+}
+
+.agent-button {
+    background-color: #13426c; /* Same color as the property price */
+    color: #FFF; /* White text for better contrast on the dark background */
+    padding: 10px 20px; /* Adjust to your preference */
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 5px; /* Gives a rounded corner to the button */
+    cursor: pointer;
+    box-shadow: 0px 0px 15px 2px rgba(0, 0, 0, 0.3); /* Drop shadow for the button */
+    transition: transform 0.2s; /* Adds a subtle effect when the button is clicked */
+}
+
+.agent-button:hover {
+    background-color: #0f375a; /* Slightly darker shade on hover for visual feedback */
+}
+
+.agent-button:active {
+    transform: scale(0.97); /* Subtle "press" effect when button is clicked */
+}
+
+#investment-summary-cashflow {
+    width: 100%;
+    max-width: 300px;
+    border-collapse: collapse;
+    /* Removing margin for left alignment */
+}
+
+#investment-summary-cashflow thead th {
+    color: #13426c;  
+    font-size: 1.3rem;  /* Reduced font size for the header */
+    padding: 3px 2px;  /* Reduced padding for lesser white space */
+    border-bottom: 2px solid #13426c;
+    text-align: left;
+}
+
+#investment-summary-cashflow tbody td {
+    padding: 3px 2px;  /* Reduced padding for lesser white space */
+    font-size: 1rem;  /* Reduced font size for the table body */
+}
+
+#investment-summary-cashflow tbody td:nth-child(2) {
+    text-align: right;
 }

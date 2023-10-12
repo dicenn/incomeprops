@@ -24,8 +24,6 @@
     closeConnection();
 ?>
 
-<h1><?= $property['Address'] ?> - <?= $property['Community name'] ?></h1>
-
 <!-- define the variables needed for the photo navigation -->
 <script>
     let currentPhotoIndex = 0;  
@@ -39,11 +37,28 @@
 </script>
 
 <!-- photos section -->
+<!-- photos section -->
 <div class="photos-section">
     <img id="currentPhoto" src="<?= $property['Pic1'] ?>">
+    
+    <!-- Property details overlay -->
+    <div class="property-info">
+        <span><?= $property['num_units'] ?> Units</span> |
+        <span><?= $property['Bedrooms'] ?> Bedrooms</span> |
+        <span><?= $property['Bathrooms'] ?> Bathrooms</span>
+    </div>
+
     <button class="photo-nav prev" onclick="prevPhoto()">&#8592;</button>
     <button class="photo-nav next" onclick="nextPhoto()">&#8594;</button>
 </div>
+
+<div class="property-price-cashflow">
+    $<?= number_format($property['Price']) ?>
+</div>
+<div class="property-address-cashflow">
+    <?= $property['Address'] ?>
+</div>
+<button class="agent-button">Speak to an Agent</button>
 
 <!-- property summary section -->
 <div style="flex: 1 1 auto;">
@@ -136,21 +151,20 @@
 ?>
 
 <!-- investment summary table -->
-<table id="investment-summary">
+<table id="investment-summary-cashflow">
     <thead>
         <tr>
-            <th>Metric</th>
-            <th>Value</th>
+            <th colspan="2">Investment Summary</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td>Annualized Return (IRR)</td>
-            <td id="irrValue">-</td>
+            <td>Initial Investment</td>
+            <td id="initialInvestmentValue">-</td>
         </tr>
         <tr>
-            <td>NOI (annual)</td>
-            <td id="noiValue">-</td>
+            <td>Annual Return</td>
+            <td id="irrValue">-</td>
         </tr>
         <tr>
             <td>Cap Rate</td>
@@ -161,8 +175,8 @@
             <td id="monthlyCashFlowValue">-</td>
         </tr>
         <tr>
-            <td>Initial Investment</td>
-            <td id="initialInvestmentValue">-</td>
+            <td>Annual NOI</td>
+            <td id="noiValue">-</td>
         </tr>
     </tbody>
 </table>
