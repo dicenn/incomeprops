@@ -60,18 +60,6 @@
 </div>
 <button class="agent-button">Speak to an Agent</button>
 
-<!-- property summary section -->
-<div style="flex: 1 1 auto;">
-    <section class="property-details">
-        <p>Price: <?= $property['Price'] ?></p>
-        <p>Bedrooms: <?= $property['Bedrooms'] ?></p>
-        <p>Bathrooms: <?= $property['Bathrooms'] ?></p>
-        <p>Building type: <?= $property['Building type'] ?></p>
-        <p>Property taxes: <?= $property['Property taxes'] ?></p>
-        <p>Lot size: <?= $property['Lot size'] ?></p>
-    </section>
-</div>
-
 <!-- units + rent table -->
 <table>
     <tr>
@@ -122,23 +110,6 @@
 
 <!-- set up fields / rows for the user inputs and cash flow analysis tables -->
 <?php
-    $inputs = [
-        "purchasePrice" => ["label" => "Purchase Price ($)", "value" => $property['Price']],
-        "downpaymentPercentage" => ["label" => "Downpayment (%)", "value" => "0.20"],
-        "monthlyRent" => ["label" => "Monthly Rent ($)", "value" => $totalRent, "readonly" => true],
-        "propertyTax" => ["label" => "Property Tax ($)", "value" => intval(preg_replace('/[,.]/', '', substr($property['Property taxes'], 1, 6))) , "readonly" => true],
-        "appreciationPercentage" => ["label" => "Appreciation (%)", "value" => "0.06"],
-        "holdingPeriod" => ["label" => "Holding Period (Years)", "value" => "5"],
-        "mortgageRate" => ["label" => "Mortgage Rate (%)", "value" => "0.06"],
-        "renovationCosts" => ["label" => "Renovation Costs ($)", "value" => "0"],
-        "mortgageTerm" => ["label" => "Mortgage Term (Years)", "value" => "30"],
-        "landTransferTaxPercentage" => ["label" => "Land Transfer Tax (%)", "value" => "0.04"],
-        "monthlyCapexReserve" => ["label" => "Monthly CapEx Reserve ($)", "value" => "400"],
-        "annualInsurance" => ["label" => "Annual Insurance ($)", "value" => "1500"],
-        "sellingCosts" => ["label" => "Selling Costs (%)", "value" => "0.04"],
-        "vacancyAllowance" => ["label" => "Vacancy Allowance (%)", "value" => "0.05"]
-    ];
-
     $analysisItems = [
         "initialInvestment" => "Initial Investment",
         "mortgageExpenses" => "Mortgage Expenses",
@@ -182,27 +153,85 @@
 </table>
 
 <!-- the user inputs table -->
-<div class="user-input-section">
-    <h2>User Inputs</h2>
-    <form id="financialAnalysisForm">
-        <table>
-            <tbody>
-                <?php foreach ($inputs as $id => $details): ?>
-                    <tr>
-                        <td><label for="<?= $id ?>"><?= $details['label'] ?>:</label></td>
-                        <td>
-                            <input 
-                                id="<?= $id ?>" 
-                                value="<?= $details['value'] ?>"
-                                <?= isset($details['readonly']) && $details['readonly'] ? "readonly" : "" ?>
-                            >
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </form>
-</div>
+<form id="financialAnalysisFormKeyInputs">
+    <table class="investment-summary-cashflow">
+        <thead>
+            <tr>
+                <th colspan="2">Key inputs</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><label for="purchasePrice">Purchase Price ($):</label></td>
+                <td><input class="input-light-blue" id="purchasePrice" value="<?= $property['Price'] ?>"></td>
+            </tr>
+            <tr>
+                <td><label for="downpaymentPercentage">Downpayment (%):</label></td>
+                <td><input class="input-light-blue" id="downpaymentPercentage" value="0.20"></td>
+            </tr>
+            <tr>
+                <td><label for="appreciationPercentage">Appreciation (%):</label></td>
+                <td><input class="input-light-blue" id="appreciationPercentage" value="0.06"></td>
+            </tr>
+            <tr>
+                <td><label for="holdingPeriod">Holding Period (Years):</label></td>
+                <td><input class="input-light-blue" id="holdingPeriod" value="5"></td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<form id="financialAnalysisFormOtherInputs">
+    <table class="investment-summary-cashflow">
+        <thead>
+            <tr>
+                <th colspan="2">Key inputs</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><label for="monthlyRent">Monthly Rent ($):</label></td>
+                <td><input class="input-light-blue" id="monthlyRent" value="<?= $totalRent ?>" readonly></td>
+            </tr>
+            <tr>
+                <td><label for="propertyTax">Property Tax ($):</label></td>
+                <td><input class="input-light-blue" id="propertyTax" value="<?= intval(preg_replace('/[,.]/', '', substr($property['Property taxes'], 1, 6))) ?>" readonly></td>
+            </tr>
+            <tr>
+                <td><label for="mortgageRate">Mortgage Rate (%):</label></td>
+                <td><input class="input-light-blue" id="mortgageRate" value="0.06"></td>
+            </tr>
+            <tr>
+                <td><label for="renovationCosts">Renovation Costs ($):</label></td>
+                <td><input class="input-light-blue" id="renovationCosts" value="0"></td>
+            </tr>
+            <tr>
+                <td><label for="mortgageTerm">Mortgage Term (Years):</label></td>
+                <td><input class="input-light-blue" id="mortgageTerm" value="30"></td>
+            </tr>
+            <tr>
+                <td><label for="landTransferTaxPercentage">Land Transfer Tax (%):</label></td>
+                <td><input class="input-light-blue" id="landTransferTaxPercentage" value="0.04"></td>
+            </tr>
+            <tr>
+                <td><label for="monthlyCapexReserve">Monthly CapEx Reserve ($):</label></td>
+                <td><input class="input-light-blue" id="monthlyCapexReserve" value="400"></td>
+            </tr>
+            <tr>
+                <td><label for="annualInsurance">Annual Insurance ($):</label></td>
+                <td><input class="input-light-blue" id="annualInsurance" value="1500"></td>
+            </tr>
+            <tr>
+                <td><label for="sellingCosts">Selling Costs (%):</label></td>
+                <td><input class="input-light-blue" id="sellingCosts" value="0.04"></td>
+            </tr>
+            <tr>
+                <td><label for="vacancyAllowance">Vacancy Allowance (%):</label></td>
+                <td><input class="input-light-blue" id="vacancyAllowance" value="0.05"></td>
+            </tr>
+        </tbody>
+    </table>
+</form>
 
 <!-- the cah flow analysis table -->
 <div class="cashflow-analysis-section">

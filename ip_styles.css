@@ -303,7 +303,7 @@ body {
 
 #investment-summary-cashflow thead th {
     color: #13426c;  
-    font-size: 1.3rem;  /* Reduced font size for the header */
+    font-size: 1.1rem;  /* Reduced font size for the header */
     padding: 3px 2px;  /* Reduced padding for lesser white space */
     border-bottom: 2px solid #13426c;
     text-align: left;
@@ -311,9 +311,44 @@ body {
 
 #investment-summary-cashflow tbody td {
     padding: 3px 2px;  /* Reduced padding for lesser white space */
-    font-size: 1rem;  /* Reduced font size for the table body */
+    font-size: 0.9rem;  /* Reduced font size for the table body */
 }
 
 #investment-summary-cashflow tbody td:nth-child(2) {
+    text-align: right;
+}
+
+.input-light-blue {
+    background-color: #f4faff;
+    border: none; /* Removes border */
+    text-align: right; /* Aligns text to the right */
+    font-family: inherit; /* Ensures the font is the same as the parent/container */
+    width: 100%; /* Makes the input take the full width of its container */
+    box-sizing: border-box; /* Ensures padding and border (if any) do not increase the width */
+    padding: 3px 5px; /* Adds some padding */
+    outline: none; /* Removes focus outline, but be cautious about accessibility concerns */
+}
+
+.investment-summary-cashflow {
+    width: 100%;
+    max-width: 300px;
+    border-collapse: collapse;
+    /* Removing margin for left alignment */
+}
+
+.investment-summary-cashflow thead th {
+    color: #13426c;  
+    font-size: 1.1rem;  /* Reduced font size for the header */
+    padding: 3px 2px;  /* Reduced padding for lesser white space */
+    border-bottom: 2px solid #13426c;
+    text-align: left;
+}
+
+.investment-summary-cashflow tbody td {
+    padding: 3px 2px;  /* Reduced padding for lesser white space */
+    font-size: 0.9rem;  /* Reduced font size for the table body */
+}
+
+.investment-summary-cashflow tbody td:nth-child(2) {
     text-align: right;
 }
