@@ -2,8 +2,9 @@ const finance = new Finance();
 console.log("cash_flow_calc.js loaded");
 
 function updateCashFlowAnalysisTable() {
-    console.log("Updating Cash Flow Analysis Table..."); // Debugging statement
+    console.log("Updating Cash Flow Analysis Table...");
     let totalRent = 0;
+    let totalUnitsCount = 0;
 
     document.querySelectorAll(".rent-row").forEach(row => {
         let units = parseFloat(row.querySelector(".units").value) || 0;
@@ -12,13 +13,18 @@ function updateCashFlowAnalysisTable() {
         let totalRentForType = units * rentPerUnit;
 
         rentPerUnitInput.value = units ? rentPerUnit : '';
-        row.querySelector(".total-rent").textContent = units ? totalRentForType.toFixed(2) : '';
+        row.querySelector(".total-rent").textContent = units ? formatCurrency(totalRentForType.toFixed(2)) : '';  /* 3. Format to currency */
         
         totalRent += totalRentForType;
+        totalUnitsCount += units;
     });
 
-    document.getElementById("totalRent").textContent = totalRent.toFixed(2);
+    document.getElementById("totalRentDisplay").textContent = formatCurrency(totalRent.toFixed(2));
     document.getElementById("monthlyRent").value = totalRent.toFixed(2);
+
+    // document.getElementById("totalRent").textContent = formatCurrency(totalRent.toFixed(2)); /* 3. Format to currency */
+    // document.getElementById("monthlyRent").value = formatCurrency(totalRent.toFixed(2)); /* 3. Format to currency */
+    document.getElementById("totalUnits").textContent = totalUnitsCount;
 
     // Pull values and compute as earlier
     let purchasePrice = parseFloat(document.getElementById("purchasePrice").value);

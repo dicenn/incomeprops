@@ -37,7 +37,6 @@
 </script>
 
 <!-- photos section -->
-<!-- photos section -->
 <div class="photos-section">
     <img id="currentPhoto" src="<?= $property['Pic1'] ?>">
     
@@ -104,7 +103,8 @@
         <td><strong>Total</strong></td>
         <td><strong id="totalUnits"><?= $totalUnits ?></strong></td>
         <td></td>
-        <td><strong id="totalRent"><?= number_format($totalRent, 2) ?></strong></td>
+        <td><strong id="totalRentDisplay"></strong></td>
+        <input type="hidden" id="monthlyRent" value="0">
     </tr>
 </table>
 
@@ -208,10 +208,10 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
+            <!-- <tr>
                 <td><label for="monthlyRent"><?= $inputs['monthlyRent']['label'] ?>:</label></td>
                 <td><input class="input-light-blue" id="monthlyRent" value="<?= $inputs['monthlyRent']['value'] ?>" readonly></td>
-            </tr>
+            </tr> -->
             <tr>
                 <td><label for="propertyTax"><?= $inputs['propertyTax']['label'] ?>:</label></td>
                 <td><input class="input-light-blue" id="propertyTax" value="<?= $inputs['propertyTax']['value'] ?>" readonly></td>

@@ -371,7 +371,12 @@ body {
     font-size: 1rem;
     padding: 3px 2px;
     border-bottom: 2px solid #13426c;
-    text-align: left;
+    text-align: center; /* 1. Justify the header row center */
+}
+
+.rent-table td:nth-child(n+2):nth-child(-n+4), /* 2. Justify columns 2-4 to the right */
+.rent-table th:nth-child(n+2):nth-child(-n+4) {
+    text-align: right;
 }
 
 .rent-table td {
@@ -391,15 +396,27 @@ body {
     outline: none;
 }
 
-.rent-table td.total-rent {
-    text-align: right;
+.rent-table tr:last-child {  /* 4. Add a border above the totals row */
+    border-top: 1px solid #13426c;
 }
 
 .rent-table th .sub-heading {
-    display: block;  /* This will put the text on a new line */
-    font-size: 0.8rem;  /* Slightly smaller font size */
-    font-style: italic;  /* Italic font */
-    font-weight: normal; /* Ensures the text is not bold */
+    display: block;
+    font-size: 0.8rem;
+    font-style: italic;
+    font-weight: normal;
+}
+
+/* Chrome, Safari, Edge, Opera */
+.rent-table input::-webkit-outer-spin-button,
+.rent-table input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+.rent-table input[type="number"] {
+    -moz-appearance: textfield;
 }
 
 .cashflow-analysis-section {
