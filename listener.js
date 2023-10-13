@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
     if (bodyDataPage === "cashflow") {
-        // You can skip checking for page type since you're including this script only for cashflow page
         const holdingPeriodInput = document.getElementById('holdingPeriod');
             
         if (holdingPeriodInput) {
@@ -11,17 +10,22 @@ document.addEventListener("DOMContentLoaded", function() {
                 adjustColumns();
             });
         }
-
-        // Attach event listeners to all input fields
-        let formFields = document.querySelectorAll("#financialAnalysisForm input");
+    
+        // Attach event listeners to all input fields in both forms
+        let formFieldsOtherInputs = document.querySelectorAll("#financialAnalysisFormOtherInputs input");
+        let formFieldsKeyInputs = document.querySelectorAll("#financialAnalysisFormKeyInputs input");
         
-        formFields.forEach(field => {
+        // Combine both NodeList into an array and then iterate
+        let allFormFields = [...formFieldsOtherInputs, ...formFieldsKeyInputs];
+        
+        allFormFields.forEach(field => {
             field.addEventListener("input", updateCashFlowAnalysisTable);
-        });        
+        });    
 
         // Call the update function initially
         updateCashFlowAnalysisTable();
     }
+    
     else if (bodyDataPage === "landing") {
         propertiesArray.forEach((property) => {
             let encodedAddressJs = encodeURIComponent(property.Address).replace(/%20/g, '+');

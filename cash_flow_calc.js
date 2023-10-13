@@ -36,6 +36,8 @@ function updateCashFlowAnalysisTable() {
     let sellingCosts = parseFloat(document.getElementById("sellingCosts").value);
     let vacancyAllowance = parseFloat(document.getElementById("vacancyAllowance").value);
 
+    console.log(holdingPeriod)
+
     // Calcs for all of the line items in the cash flow table
     let initialInvestment = purchasePrice * downpaymentPercentage + landTransferTaxPercentage * purchasePrice + renovationCosts;
     let annualMortgageExpenses = PMT(mortgageRate, mortgageTerm, purchasePrice * (1 - downpaymentPercentage));
@@ -55,8 +57,20 @@ function updateCashFlowAnalysisTable() {
     let noi = monthlyRent * (1 - vacancyAllowance) * 12 - annualNonMortgageExpenses;
     let capRate = noi / purchasePrice;
     let monthlyCashFlow = netIncome / 12
+
+    // cash inflows and cash outflows totals rows values
+    let cashOutFlowsTotalYear0 = -initialInvestment
+    let cashOutFlowsTotalYear1 = -annualMortgageExpenses + -annualNonMortgageExpenses
+    let cashOutFlowsTotalYearN = -annualMortgageExpenses + -annualNonMortgageExpenses
+    let cashInFlowsTotalYear1 = income
+    let cashInFlowsTotalYearN = income + proceedsFromSale
     // console.log(generateCashFlows(holdingPeriod, netCashFlow0, netCashFlow1, netCashFlowN))
     
+    updateElement('outflowsYear0', cashOutFlowsTotalYear0);
+    updateElement('outflowsYear1', cashOutFlowsTotalYear1);
+    updateElement('outflowsYearN', cashOutFlowsTotalYearN);
+    updateElement('inflowsYear1', cashInFlowsTotalYear1);
+    updateElement('inflowsYearN', cashInFlowsTotalYearN);
 
     if (generateCashFlows(holdingPeriod, netCashFlow0, netCashFlow1, netCashFlowN).length === 2) {
         irr = (netCashFlow1 / -netCashFlow0) - 1;
@@ -84,14 +98,21 @@ function updateCashFlowAnalysisTable() {
     updateElement('netCashFlowYear1', netCashFlow1);
     updateElement('netCashFlowYearN', netCashFlowN);
 
+    updateElement('mortgageExpensesYear1',-annualMortgageExpenses)
+    updateElement('mortgageExpensesYearN',-annualMortgageExpenses)
+    updateElement('expensesYear1',-annualNonMortgageExpenses)
+    updateElement('expensesYearN',-annualNonMortgageExpenses)
+    updateElement('incomeYear1',income)
+    updateElement('incomeYearN',income)
+
     const proceedsFromSaleElementId = holdingPeriod >= 2 ? 'proceedsFromSaleYearN' : `proceedsFromSaleYear1`;
     updateElement(proceedsFromSaleElementId, proceedsFromSale);
 
-    for (let key in dataMap) {
-        // updateElement(`${key}Year0`, dataMap[key]);
-        updateElement(`${key}Year1`, dataMap[key]);
-        updateElement(`${key}YearN`, dataMap[key]);
-    }
+    // for (let key in dataMap) {
+    //     // updateElement(`${key}Year0`, dataMap[key]);
+    //     updateElement(`${key}Year1`, dataMap[key]);
+    //     updateElement(`${key}YearN`, dataMap[key]);
+    // }
 
     // updating the investment summary table
     document.getElementById('noiValue').textContent = formatCurrency(noi);
@@ -125,7 +146,7 @@ function FV_Annuity(purchasePrice, downpaymentPercentage, mortgageRate, nper, mo
 function updateElement(elementId, value) {
     const element = document.getElementById(elementId);
     if (element) {
-        element.textContent = "$" + value.toFixed(0);
+        element.textContent = formatCurrency(value);
     }
 }
 

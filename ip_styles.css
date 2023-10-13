@@ -338,7 +338,7 @@ body {
 
 .investment-summary-cashflow thead th {
     color: #13426c;  
-    font-size: 1.1rem;  /* Reduced font size for the header */
+    font-size: 1rem;  /* Reduced font size for the header */
     padding: 3px 2px;  /* Reduced padding for lesser white space */
     border-bottom: 2px solid #13426c;
     text-align: left;
@@ -351,4 +351,139 @@ body {
 
 .investment-summary-cashflow tbody td:nth-child(2) {
     text-align: right;
+    width: 100px;  /* or whatever width you want */
+}
+
+.key-inputs-cashflow td:nth-child(2),
+.other-inputs-cashflow td:nth-child(2) {
+    width: 100px;  /* or whatever width you want */
+}
+
+/* New styles for the rent-table */
+.rent-table {
+    width: 100%;
+    max-width: 300px;
+    border-collapse: collapse;
+}
+
+.rent-table th {
+    color: #13426c;
+    font-size: 1rem;
+    padding: 3px 2px;
+    border-bottom: 2px solid #13426c;
+    text-align: left;
+}
+
+.rent-table td {
+    padding: 3px 2px;
+    font-size: 0.9rem;
+}
+
+.rent-table .units,
+.rent-table .rent-per-unit {
+    background-color: #f4faff;
+    border: none;
+    text-align: right;
+    font-family: inherit;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 3px 5px;
+    outline: none;
+}
+
+.rent-table td.total-rent {
+    text-align: right;
+}
+
+.rent-table th .sub-heading {
+    display: block;  /* This will put the text on a new line */
+    font-size: 0.8rem;  /* Slightly smaller font size */
+    font-style: italic;  /* Italic font */
+    font-weight: normal; /* Ensures the text is not bold */
+}
+
+.cashflow-analysis-section {
+    width: 100%;
+    margin: 20px 0;
+    border-collapse: collapse;
+}
+
+.cashflow-analysis-section table {
+    width: 100%;
+    max-width: 500px; 
+    border-collapse: collapse;
+}
+
+.cashflow-analysis-section thead th {
+    color: #13426c;
+    font-size: 1rem;
+    padding: 3px 2px;
+    border-bottom: 2px solid #13426c;
+    text-align: center;
+}
+
+.cashflow-analysis-section tbody td {
+    padding: 3px 2px;
+    font-size: 0.9rem;
+}
+
+.cashflow-analysis-section tbody tr:last-child {
+    font-weight: bold;
+    border-top: 1px solid #13426c;
+}
+
+.cashflow-sub-heading {
+    display: block; 
+    font-size: 0.8rem; 
+    font-style: italic;
+    font-weight: normal; 
+}
+
+.cashflow-analysis-section th {
+    text-align: center;
+}
+
+.cashflow-analysis-section tbody td:first-child {
+    width: 33%; /* Set the width of the first column to 40% */
+}
+
+.cashflow-analysis-section tbody td:nth-child(n+2) {
+    text-align: right;
+    width: 22%; /* Ensure the width of columns 2-4 is 20% */
+}
+
+/* Darker grey for inflow and outflow rows. 
+   Assuming they are the first and fourth rows respectively */
+.cashflow-analysis-section tbody tr:nth-child(1),
+.cashflow-analysis-section tbody tr:nth-child(5) {
+    background-color: #d0d0d0; /* A darker grey color. Adjust to your liking */
+    font-weight: bold;
+}
+
+/* .cash-inflows-row, .cash-outflows-row {
+    background-color: #d0d0d0;
+} */
+
+.cashflow-analysis-section thead th:first-child {
+    color: #13426c;
+    font-size: 1rem;
+    padding: 3px 2px;
+    border-bottom: 2px solid #13426c;
+    text-align: left;
+}
+
+.cashflow-analysis-section thead th:nth-child(n+2) {
+    color: #13426c;
+    font-size: 1rem;
+    padding: 3px 2px;
+    border-bottom: 2px solid #13426c;
+    text-align: center;
+}
+
+.indented-row td {
+    color: #666; /* Dark grey font color */
+}
+
+.indented-row td:first-child {
+    padding-left: 20px; /* Adjust this value to increase/decrease the indentation */
 }

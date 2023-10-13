@@ -20,7 +20,8 @@ function adjustColumns() {
     }
 
     if (holdingPeriodValue > 2) {
-        thead.querySelector('tr').innerHTML += `<th>Year 1 - ${holdingPeriodValue - 1} (annually)</th>`;
+        thead.querySelector('tr').innerHTML += `<th>Year 1 - ${holdingPeriodValue - 1} <span class="cashflow-sub-heading">(annually)</span></th>`;
+        // thead.querySelector('tr').innerHTML += `<th>Year 1 - ${holdingPeriodValue - 1} (annually)</th>`;
         thead.querySelector('tr').innerHTML += `<th>Year ${holdingPeriodValue}</th>`;
     }
 
