@@ -273,25 +273,41 @@ body {
     font-weight: bold;
 }
 
-.agent-button {
-    background-color: #13426c; /* Same color as the property price */
-    color: #FFF; /* White text for better contrast on the dark background */
-    padding: 10px 20px; /* Adjust to your preference */
+.button-common {
+    width: 175px;
+    color: #FFF; /* White text for better contrast on the background */
+    padding: 10px 3px; /* Adjust to your preference */
     border: none;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: bold;
     border-radius: 5px; /* Gives a rounded corner to the button */
     cursor: pointer;
     box-shadow: 0px 0px 15px 2px rgba(0, 0, 0, 0.3); /* Drop shadow for the button */
-    transition: transform 0.2s; /* Adds a subtle effect when the button is clicked */
+    transition: transform 0.3s; /* Adds a subtle effect when the button is clicked */
+}
+
+.button-common:hover {
+    /* We will leave this blank for now and customize it in our modifier classes */
+}
+
+.button-common:active {
+    transform: scale(0.97); /* Subtle "press" effect when button is clicked */
+}
+
+.agent-button {
+    background-color: #13426c;
 }
 
 .agent-button:hover {
-    background-color: #0f375a; /* Slightly darker shade on hover for visual feedback */
+    background-color: #0f375a;
 }
 
-.agent-button:active {
-    transform: scale(0.97); /* Subtle "press" effect when button is clicked */
+.restore-button {
+    background-color: #808080;
+}
+
+.restore-button:hover {
+    background-color: #6b6b6b;
 }
 
 #investment-summary-cashflow {

@@ -1,28 +1,17 @@
+document.getElementById('recalculateButton').addEventListener('click', function() {
+    // if (validateInputs()) {
+        updateCashFlowAnalysisTable();
+    // }
+});
+
+document.getElementById("restore-button").addEventListener("click", function() {
+    location.reload();
+});
+
 document.addEventListener("DOMContentLoaded", function() {
     const bodyDataPage = document.body.getAttribute("data-page");
 
-
     if (bodyDataPage === "cashflow") {
-        const holdingPeriodInput = document.getElementById('holdingPeriod');
-            
-        if (holdingPeriodInput) {
-            holdingPeriodInput.addEventListener('input', function() {
-                adjustColumns();
-            });
-        }
-    
-        // Attach event listeners to all input fields in both forms
-        let formFieldsOtherInputs = document.querySelectorAll("#financialAnalysisFormOtherInputs input");
-        let formFieldsKeyInputs = document.querySelectorAll("#financialAnalysisFormKeyInputs input");
-        
-        // Combine both NodeList into an array and then iterate
-        let allFormFields = [...formFieldsOtherInputs, ...formFieldsKeyInputs];
-        
-        allFormFields.forEach(field => {
-            field.addEventListener("input", updateCashFlowAnalysisTable);
-        });    
-
-        // Call the update function initially
         updateCashFlowAnalysisTable();
     }
     

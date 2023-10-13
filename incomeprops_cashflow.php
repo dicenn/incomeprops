@@ -57,7 +57,7 @@
 <div class="property-address-cashflow">
     <?= $property['Address'] ?>
 </div>
-<button class="agent-button">Speak to an Agent</button>
+<button class="button-common agent-button">Speak to an Agent</button>
 
 <!-- units + rent table -->
 <table class="rent-table">
@@ -72,29 +72,29 @@
 
     <tr class="rent-row">
         <td>3 bdrms</td>
-        <td><input type="number" class="units" value="<?= $property['3_bedroom_units'] ?: '' ?>" onchange="updateCashFlowAnalysisTable()"></td>
-        <td><input type="number" class="rent-per-unit" value="<?= $property['3_bedroom_units'] ? $property['3_bedroom_rent'] : '' ?>" onchange="updateCashFlowAnalysisTable()"></td>
+        <td><input type="number" class="units" value="<?= $property['3_bedroom_units'] ?: '' ?>"></td>
+        <td><input type="number" class="rent-per-unit" value="<?= $property['3_bedroom_units'] ? $property['3_bedroom_rent'] : '' ?>"></td>
         <td class="total-rent"><?= ($totalRent += $property['3_bedroom_units'] * $property['3_bedroom_rent']) ?: '' ?></td>
     </tr>
 
     <tr class="rent-row">
         <td>2 bdrms</td>
-        <td><input type="number" class="units" value="<?= $property['2_bedroom_units'] ?: '' ?>" onchange="updateCashFlowAnalysisTable()"></td>
-        <td><input type="number" class="rent-per-unit" value="<?= $property['2_bedroom_units'] ? $property['2_bedroom_rent'] : '' ?>" onchange="updateCashFlowAnalysisTable()"></td>
+        <td><input type="number" class="units" value="<?= $property['2_bedroom_units'] ?: '' ?>"></td>
+        <td><input type="number" class="rent-per-unit" value="<?= $property['2_bedroom_units'] ? $property['2_bedroom_rent'] : '' ?>"></td>
         <td class="total-rent"><?= ($totalRent += $property['2_bedroom_units'] * $property['2_bedroom_rent']) ?: '' ?></td>
     </tr>
 
     <tr class="rent-row">
         <td>1 bdrms</td>
-        <td><input type="number" class="units" value="<?= $property['1_bedroom_units'] ?: '' ?>" onchange="updateCashFlowAnalysisTable()"></td>
-        <td><input type="number" class="rent-per-unit" value="<?= $property['1_bedroom_units'] ? $property['1_bedroom_rent'] : '' ?>" onchange="updateCashFlowAnalysisTable()"></td>
+        <td><input type="number" class="units" value="<?= $property['1_bedroom_units'] ?: '' ?>"></td>
+        <td><input type="number" class="rent-per-unit" value="<?= $property['1_bedroom_units'] ? $property['1_bedroom_rent'] : '' ?>"></td>
         <td class="total-rent"><?= ($totalRent += $property['1_bedroom_units'] * $property['1_bedroom_rent']) ?: '' ?></td>
     </tr>
 
     <tr class="rent-row">
         <td>Bachelors</td>
-        <td><input type="number" class="units" value="<?= $property['0_bedroom_units'] ?: '' ?>" onchange="updateCashFlowAnalysisTable()"></td>
-        <td><input type="number" class="rent-per-unit" value="<?= $property['0_bedroom_units'] ? $property['0_bedroom_rent'] : '' ?>" onchange="updateCashFlowAnalysisTable()"></td>
+        <td><input type="number" class="units" value="<?= $property['0_bedroom_units'] ?: '' ?>"></td>
+        <td><input type="number" class="rent-per-unit" value="<?= $property['0_bedroom_units'] ? $property['0_bedroom_rent'] : '' ?>"></td>
         <td class="total-rent"><?= ($totalRent += $property['0_bedroom_units'] * $property['0_bedroom_rent']) ?: '' ?></td>
     </tr>
 
@@ -198,6 +198,10 @@
         </tbody>
     </table>
 </form>
+
+<button id="recalculateButton" class="button-common agent-button">Recalculate</button>
+    <p id="errorMessage" style="color: red;"></p>
+<button id="restore-button" class="button-common restore-button">Restore defaults</button>
 
 <!-- the other inputs table -->
 <form id="financialAnalysisFormOtherInputs">
