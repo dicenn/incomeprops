@@ -151,22 +151,23 @@
     </tbody>
 </table>
 
+<!-- set the initial values of the user inputs tables -->
 <?php
     $inputs = [
         "purchasePrice" => ["label" => "Purchase Price ($)", "value" => $property['Price']],
-        "downpaymentPercentage" => ["label" => "Downpayment (%)", "value" => "0.20"],
+        "downpaymentPercentage" => ["label" => "Downpayment (%)", "value" => "20"],
         "monthlyRent" => ["label" => "Monthly Rent ($)", "value" => $totalRent, "readonly" => true],
         "propertyTax" => ["label" => "Property Tax ($)", "value" => intval(preg_replace('/[,.]/', '', substr($property['Property taxes'], 1, 6))) , "readonly" => true],
-        "appreciationPercentage" => ["label" => "Appreciation (%)", "value" => "0.06"],
+        "appreciationPercentage" => ["label" => "Appreciation (%)", "value" => "6"],
         "holdingPeriod" => ["label" => "Holding Period (Years)", "value" => "5"],
-        "mortgageRate" => ["label" => "Mortgage Rate (%)", "value" => "0.06"],
+        "mortgageRate" => ["label" => "Mortgage Rate (%)", "value" => "6"],
         "renovationCosts" => ["label" => "Renovation Costs ($)", "value" => "0"],
         "mortgageTerm" => ["label" => "Mortgage Term (Years)", "value" => "30"],
-        "landTransferTaxPercentage" => ["label" => "Land Transfer Tax (%)", "value" => "0.04"],
+        "landTransferTaxPercentage" => ["label" => "Land Transfer Tax (%)", "value" => "4"],
         "monthlyCapexReserve" => ["label" => "Monthly CapEx Reserve ($)", "value" => "400"],
         "annualInsurance" => ["label" => "Annual Insurance ($)", "value" => "1500"],
-        "sellingCosts" => ["label" => "Selling Costs (%)", "value" => "0.04"],
-        "vacancyAllowance" => ["label" => "Vacancy Allowance (%)", "value" => "0.05"]
+        "sellingCosts" => ["label" => "Selling Costs (%)", "value" => "4"],
+        "vacancyAllowance" => ["label" => "Vacancy Allowance (%)", "value" => "5"]
     ];
 ?>
 

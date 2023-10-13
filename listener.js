@@ -1,17 +1,20 @@
-document.getElementById('recalculateButton').addEventListener('click', function() {
-    // if (validateInputs()) {
-        updateCashFlowAnalysisTable();
-    // }
-});
-
-document.getElementById("restore-button").addEventListener("click", function() {
-    location.reload();
-});
-
 document.addEventListener("DOMContentLoaded", function() {
     const bodyDataPage = document.body.getAttribute("data-page");
 
     if (bodyDataPage === "cashflow") {
+
+        console.log(document.getElementById('recalculateButton')); // It should print the button element
+
+        document.getElementById('recalculateButton').addEventListener('click', function() {
+            console.log("Button was clicked");
+            adjustColumns();
+            updateCashFlowAnalysisTable();
+        });        
+
+        document.getElementById("restore-button").addEventListener("click", function() {
+            location.reload();
+        });
+
         updateCashFlowAnalysisTable();
     }
     

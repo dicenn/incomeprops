@@ -28,19 +28,19 @@ function updateCashFlowAnalysisTable() {
 
     // Pull values and compute as earlier
     let purchasePrice = parseFloat(document.getElementById("purchasePrice").value);
-    let downpaymentPercentage = parseFloat(document.getElementById("downpaymentPercentage").value);
+    let downpaymentPercentage = parseFloat(document.getElementById("downpaymentPercentage").value) / 100;
     let monthlyRent = parseFloat(document.getElementById("monthlyRent").value);
     let propertyTax = parseFloat(document.getElementById("propertyTax").value);
-    let appreciationPercentage = parseFloat(document.getElementById("appreciationPercentage").value);
+    let appreciationPercentage = parseFloat(document.getElementById("appreciationPercentage").value) / 100;
     let holdingPeriod = parseFloat(document.getElementById("holdingPeriod").value);
-    let mortgageRate = parseFloat(document.getElementById("mortgageRate").value);
+    let mortgageRate = parseFloat(document.getElementById("mortgageRate").value) / 100;
     let renovationCosts = parseFloat(document.getElementById("renovationCosts").value);
     let mortgageTerm = parseFloat(document.getElementById("mortgageTerm").value);
-    let landTransferTaxPercentage = parseFloat(document.getElementById("landTransferTaxPercentage").value);
+    let landTransferTaxPercentage = parseFloat(document.getElementById("landTransferTaxPercentage").value) / 100;
     let monthlyCapexReserve = parseFloat(document.getElementById("monthlyCapexReserve").value);
     let annualInsurance = parseFloat(document.getElementById("annualInsurance").value);
-    let sellingCosts = parseFloat(document.getElementById("sellingCosts").value);
-    let vacancyAllowance = parseFloat(document.getElementById("vacancyAllowance").value);
+    let sellingCosts = parseFloat(document.getElementById("sellingCosts").value) / 100;
+    let vacancyAllowance = parseFloat(document.getElementById("vacancyAllowance").value) / 100;
 
     console.log(holdingPeriod)
 
