@@ -309,3 +309,58 @@ function prevPhoto() {
         document.getElementById('currentPhoto').src = photos[currentPhotoIndex];
     }
 }
+
+function validateInputs() {
+    // Clear any previous error messages
+    document.getElementById("errorMessage").textContent = "";
+
+    // Example ranges (replace with your actual ranges)
+    const inputRanges = {
+        "purchasePrice": [0, 10000000],
+        "purchasePrice": [0,100000000],
+        "downpaymentPercentage": [0,100],
+        "appreciationPercentage": [0,100],
+        "holdingPeriod": [1,50],
+        "mortgageRate": [0.01,100],
+        "renovationCosts": [0,10000000],
+        "mortgageTerm": [1,30],
+        "landTransferTaxPercentage": [0,100],
+        "monthlyCapexReserve": [0,100000],
+        "annualInsurance": [0,100000],
+        "sellingCosts": [0,100],
+        "vacancyAllowance": [0,100]
+    };
+
+    let isValid = true;  // Assume all inputs are valid at the start
+
+    for (let inputID in inputRanges) {
+        let inputElement = document.getElementById(inputID);
+        let value = inputElement.value.trim();  // Remove whitespace
+
+        // Check if value is empty or not a number
+        if (value === "" || isNaN(parseFloat(value))) {
+            inputElement.style.backgroundColor = "#f4ccccff";  // Red fill
+            inputElement.style.color = "#cc0000";  // Red text
+            isValid = false;
+        }
+        // Check if number is outside the valid range
+        else if (parseFloat(value) < inputRanges[inputID][0] || parseFloat(value) > inputRanges[inputID][1]) {
+            inputElement.style.backgroundColor = "#f4ccccff";  // Red fill
+            inputElement.style.color = "#cc0000";  // Red text
+            isValid = false;
+        }
+        // If valid, reset any previous styles
+        else {
+            inputElement.style.backgroundColor = "";  // Reset fill
+            inputElement.style.color = "";  // Reset text color
+        }
+    }
+
+    if (!isValid) {
+        const errorMsgElement = document.getElementById("errorMessage");
+        errorMsgElement.textContent = "Please check the highlighted input(s); make sure it's a number or within a reasonable range.";
+        errorMsgElement.style.fontSize = "0.8rem"; // Smaller font size
+    }
+
+    return isValid;
+}

@@ -7,8 +7,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
         document.getElementById('recalculateButton').addEventListener('click', function() {
             console.log("Button was clicked");
-            adjustColumns();
-            updateCashFlowAnalysisTable();
+            if (validateInputs()) {
+                adjustColumns();
+                updateCashFlowAnalysisTable();
+            }
         });        
 
         document.getElementById("restore-button").addEventListener("click", function() {

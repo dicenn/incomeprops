@@ -204,7 +204,7 @@
 </form>
 
 <button id="recalculateButton" class="button-common agent-button">Recalculate</button>
-    <p id="errorMessage" style="color: red;"></p>
+    <p id="errorMessage" style="color: #cc0000; font-size: 0.8rem;"></p>
 <button id="restore-button" class="button-common restore-button">Restore defaults</button>
 
 <!-- the other inputs table -->
