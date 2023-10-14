@@ -61,51 +61,54 @@
 
 <!-- units + rent table -->
 <table class="rent-table">
-    <tr>
-        <th>Unit Type</th>
-        <th># of Units</th>
-        <th>Rent <span class="sub-heading">(per Unit)</span></th>
-        <th>Total Rent</th>
-    </tr>
+    <thead>
+        <tr>
+            <th>Unit Type</th>
+            <th># of Units</th>
+            <th>Rent <span class="sub-heading">(per Unit)</span></th>
+            <th>Total Rent</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php $totalUnits = 0; $totalRent = 0; ?>
 
-    <?php $totalUnits = 0; $totalRent = 0; ?>
+        <tr class="rent-row">
+            <td>3 bdrms</td>
+            <td><input type="number" class="units" value="<?= $property['3_bedroom_units'] ?: '' ?>"></td>
+            <td><input type="number" class="rent-per-unit" value="<?= $property['3_bedroom_units'] ? $property['3_bedroom_rent'] : '' ?>"></td>
+            <td class="total-rent"><?= ($totalRent += $property['3_bedroom_units'] * $property['3_bedroom_rent']) ?: '' ?></td>
+        </tr>
 
-    <tr class="rent-row">
-        <td>3 bdrms</td>
-        <td><input type="number" class="units" value="<?= $property['3_bedroom_units'] ?: '' ?>"></td>
-        <td><input type="number" class="rent-per-unit" value="<?= $property['3_bedroom_units'] ? $property['3_bedroom_rent'] : '' ?>"></td>
-        <td class="total-rent"><?= ($totalRent += $property['3_bedroom_units'] * $property['3_bedroom_rent']) ?: '' ?></td>
-    </tr>
+        <tr class="rent-row">
+            <td>2 bdrms</td>
+            <td><input type="number" class="units" value="<?= $property['2_bedroom_units'] ?: '' ?>"></td>
+            <td><input type="number" class="rent-per-unit" value="<?= $property['2_bedroom_units'] ? $property['2_bedroom_rent'] : '' ?>"></td>
+            <td class="total-rent"><?= ($totalRent += $property['2_bedroom_units'] * $property['2_bedroom_rent']) ?: '' ?></td>
+        </tr>
 
-    <tr class="rent-row">
-        <td>2 bdrms</td>
-        <td><input type="number" class="units" value="<?= $property['2_bedroom_units'] ?: '' ?>"></td>
-        <td><input type="number" class="rent-per-unit" value="<?= $property['2_bedroom_units'] ? $property['2_bedroom_rent'] : '' ?>"></td>
-        <td class="total-rent"><?= ($totalRent += $property['2_bedroom_units'] * $property['2_bedroom_rent']) ?: '' ?></td>
-    </tr>
+        <tr class="rent-row">
+            <td>1 bdrms</td>
+            <td><input type="number" class="units" value="<?= $property['1_bedroom_units'] ?: '' ?>"></td>
+            <td><input type="number" class="rent-per-unit" value="<?= $property['1_bedroom_units'] ? $property['1_bedroom_rent'] : '' ?>"></td>
+            <td class="total-rent"><?= ($totalRent += $property['1_bedroom_units'] * $property['1_bedroom_rent']) ?: '' ?></td>
+        </tr>
 
-    <tr class="rent-row">
-        <td>1 bdrms</td>
-        <td><input type="number" class="units" value="<?= $property['1_bedroom_units'] ?: '' ?>"></td>
-        <td><input type="number" class="rent-per-unit" value="<?= $property['1_bedroom_units'] ? $property['1_bedroom_rent'] : '' ?>"></td>
-        <td class="total-rent"><?= ($totalRent += $property['1_bedroom_units'] * $property['1_bedroom_rent']) ?: '' ?></td>
-    </tr>
+        <tr class="rent-row">
+            <td>Bachelors</td>
+            <td><input type="number" class="units" value="<?= $property['0_bedroom_units'] ?: '' ?>"></td>
+            <td><input type="number" class="rent-per-unit" value="<?= $property['0_bedroom_units'] ? $property['0_bedroom_rent'] : '' ?>"></td>
+            <td class="total-rent"><?= ($totalRent += $property['0_bedroom_units'] * $property['0_bedroom_rent']) ?: '' ?></td>
+        </tr>
 
-    <tr class="rent-row">
-        <td>Bachelors</td>
-        <td><input type="number" class="units" value="<?= $property['0_bedroom_units'] ?: '' ?>"></td>
-        <td><input type="number" class="rent-per-unit" value="<?= $property['0_bedroom_units'] ? $property['0_bedroom_rent'] : '' ?>"></td>
-        <td class="total-rent"><?= ($totalRent += $property['0_bedroom_units'] * $property['0_bedroom_rent']) ?: '' ?></td>
-    </tr>
-
-    <!-- Totals Row -->
-    <tr>
-        <td><strong>Total</strong></td>
-        <td><strong id="totalUnits"><?= $totalUnits ?></strong></td>
-        <td></td>
-        <td><strong id="totalRentDisplay"></strong></td>
-        <input type="hidden" id="monthlyRent" value="0">
-    </tr>
+        <!-- Totals Row -->
+        <tr>
+            <td><strong>Total</strong></td>
+            <td><strong id="totalUnits"><?= $totalUnits ?></strong></td>
+            <td></td>
+            <td><strong id="totalRentDisplay"></strong></td>
+            <input type="hidden" id="monthlyRent" value="0">
+        </tr>
+    </tbody>
 </table>
 
 <!-- set up fields / rows for the user inputs and cash flow analysis tables -->
@@ -366,9 +369,9 @@
 <!-- calling the js scripts and functions needed to update the user inputs, cash flow ananlysis and investment summary tables -->
 <script src="https://cdn.jsdelivr.net/npm/financejs@4.1.0/finance.js"></script>
 <script src="listener.js"></script>
-<script src="cash_flow_calc.js"></script>
-<script src="cashflow_coladj.js"></script>
-<script src="photo_nav.js"></script>
+<script src="ip_functions.js"></script>
+<!-- <script src="cashflow_coladj.js"></script>
+<script src="photo_nav.js"></script> -->
 
 </body>
 </html>

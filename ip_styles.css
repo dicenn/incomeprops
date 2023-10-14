@@ -380,6 +380,7 @@ body {
     width: 100%;
     max-width: 300px;
     border-collapse: collapse;
+    border-spacing: 0;
 }
 
 .rent-table th {
@@ -387,17 +388,25 @@ body {
     font-size: 1rem;
     padding: 3px 2px;
     border-bottom: 2px solid #13426c;
-    text-align: center; /* 1. Justify the header row center */
 }
 
-.rent-table td:nth-child(n+2):nth-child(-n+4), /* 2. Justify columns 2-4 to the right */
-.rent-table th:nth-child(n+2):nth-child(-n+4) {
-    text-align: right;
+.rent-table th:first-child {
+    text-align: left;
+}
+
+.rent-table th:nth-child(2),
+.rent-table th:nth-child(3),
+.rent-table th:nth-child(4) {
+    text-align: center;
 }
 
 .rent-table td {
     padding: 3px 2px;
     font-size: 0.9rem;
+}
+
+.rent-table td:nth-child(n+2):nth-child(-n+4) {
+    text-align: right;
 }
 
 .rent-table .units,
@@ -412,7 +421,7 @@ body {
     outline: none;
 }
 
-.rent-table tr:last-child {  /* 4. Add a border above the totals row */
+.rent-table tr:last-child {
     border-top: 1px solid #13426c;
 }
 
@@ -433,6 +442,12 @@ body {
 /* Firefox */
 .rent-table input[type="number"] {
     -moz-appearance: textfield;
+}
+
+.rent-table thead,
+.rent-table thead tr,
+.rent-table thead tr th {
+    border-top: none !important;
 }
 
 .cashflow-analysis-section {
