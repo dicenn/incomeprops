@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const bodyDataPage = document.body.getAttribute("data-page");
 
     if (bodyDataPage === "cashflow") {
-
+        document.getElementById("defaultOpen").click();
         console.log(document.getElementById('recalculateButton')); // It should print the button element
 
         document.getElementById('recalculateButton').addEventListener('click', function() {

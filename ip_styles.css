@@ -535,3 +535,44 @@ body {
 .indented-row td:first-child {
     padding-left: 20px; /* Adjust this value to increase/decrease the indentation */
 }
+
+/* Styles for the tabs */
+.tabs {
+    overflow: hidden;
+    border-bottom: 3px solid #13426c;
+}
+
+.tablink {
+    background-color: #f1f1f1;
+    color: #444;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 15px;  /* 2. Smaller text */
+    border-top-left-radius: 8px;  /* 1. Rounded top left corner */
+    border-top-right-radius: 8px;  /* 1. Rounded top right corner */
+}
+
+.tablink:hover {
+    background-color: #ddd;
+}
+
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border-top: none;
+    animation: fadeEffect 1s;  // optional fade-in effect
+}
+
+.tablink.active {
+    background-color: #13426c;
+    color: white;
+}
+
+@keyframes fadeEffect {
+    from {opacity: 0.4;}
+    to {opacity: 1;}
+}
