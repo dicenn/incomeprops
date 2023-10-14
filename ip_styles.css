@@ -564,7 +564,7 @@ body {
     display: none;
     padding: 6px 12px;
     border-top: none;
-    animation: fadeEffect 1s;  // optional fade-in effect
+    animation: fadeEffect 1s; 
 }
 
 .tablink.active {

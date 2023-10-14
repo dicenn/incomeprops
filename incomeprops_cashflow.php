@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Property cash flow analysis</title>
     <!-- CSS styles -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> <!-- bootstrap required for page layout -->
     <link rel="stylesheet" type="text/css" href="ip_styles.css">
 </head>
 <body data-page="cashflow">
@@ -24,6 +25,7 @@
     closeConnection();
 ?>
 
+
 <!-- define the variables needed for the photo navigation -->
 <script>
     let currentPhotoIndex = 0;  
@@ -36,172 +38,199 @@
         ];
 </script>
 
-<!-- photos section -->
-<div class="photos-section">
-    <img id="currentPhoto" src="<?= $property['Pic1'] ?>">
-    
-    <!-- Property details overlay -->
-    <div class="property-info">
-        <span><?= $property['num_units'] ?> Units</span> |
-        <span><?= $property['Bedrooms'] ?> Bedrooms</span> |
-        <span><?= $property['Bathrooms'] ?> Bathrooms</span>
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- photos section -->
+        <div class="col-lg-4">
+            <div class="photos-section">
+                <img id="currentPhoto" src="<?= $property['Pic1'] ?>">
+                
+                <!-- Property details overlay -->
+                <div class="property-info">
+                    <span><?= $property['num_units'] ?> Units</span> |
+                    <span><?= $property['Bedrooms'] ?> Bedrooms</span> |
+                    <span><?= $property['Bathrooms'] ?> Bathrooms</span>
+                </div>
+
+                <button class="photo-nav prev" onclick="prevPhoto()">&#8592;</button>
+                <button class="photo-nav next" onclick="nextPhoto()">&#8594;</button>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="d-flex flex-column flex-lg-row">
+                <div>
+                    <div class="property-price-cashflow">
+                        $<?= number_format($property['Price']) ?>
+                    </div>
+                    <div class="property-address-cashflow">
+                        <?= $property['Address'] ?>
+                    </div>
+                </div>
+                <div class="ml-lg-3 mt-3 mt-lg-0"> <!-- Added margin-top for mobile views -->
+                    <button class="button-common agent-button">Speak to an Agent</button>
+                </div>
+            </div>
+
+            <!-- set up fields / rows for the user inputs and cash flow analysis tables -->
+            <?php
+                $analysisItems = [
+                    "initialInvestment" => "Initial Investment",
+                    "mortgageExpenses" => "Mortgage Expenses",
+                    "expenses" => "Other expenses",
+                    "income" => "Rental income",
+                    "proceedsFromSale" => "Proceeds from Sale",
+                    "netCashFlow" => "Net Cash Flow"
+                ];
+            ?>
+
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <!-- investment summary table -->
+                    <table id="investment-summary-cashflow">
+                        <thead>
+                            <tr>
+                                <th colspan="2">Investment Summary</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Initial Investment</td>
+                                <td id="initialInvestmentValue">-</td>
+                            </tr>
+                            <tr>
+                                <td>Annual Return</td>
+                                <td id="irrValue">-</td>
+                            </tr>
+                            <tr>
+                                <td>Cap Rate</td>
+                                <td id="capRateValue">-</td>
+                            </tr>
+                            <tr>
+                                <td>Monthly Cash Flow</td>
+                                <td id="monthlyCashFlowValue">-</td>
+                            </tr>
+                            <tr>
+                                <td>Annual NOI</td>
+                                <td id="noiValue">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            <!-- set the initial values of the user inputs tables -->
+            <?php
+                $inputs = [
+                    "purchasePrice" => ["label" => "Purchase Price ($)", "value" => $property['Price']],
+                    "downpaymentPercentage" => ["label" => "Downpayment (%)", "value" => "20"],
+                    "monthlyRent" => ["label" => "Monthly Rent ($)", "value" => $totalRent, "readonly" => true],
+                    "propertyTax" => ["label" => "Property Tax ($)", "value" => intval(preg_replace('/[,.]/', '', substr($property['Property taxes'], 1, 6))) , "readonly" => true],
+                    "appreciationPercentage" => ["label" => "Appreciation (%)", "value" => "6"],
+                    "holdingPeriod" => ["label" => "Holding Period (Years)", "value" => "5"],
+                    "mortgageRate" => ["label" => "Mortgage Rate (%)", "value" => "6"],
+                    "renovationCosts" => ["label" => "Renovation Costs ($)", "value" => "0"],
+                    "mortgageTerm" => ["label" => "Mortgage Term (Years)", "value" => "30"],
+                    "landTransferTaxPercentage" => ["label" => "Land Transfer Tax (%)", "value" => "4"],
+                    "monthlyCapexReserve" => ["label" => "Monthly CapEx Reserve ($)", "value" => "400"],
+                    "annualInsurance" => ["label" => "Annual Insurance ($)", "value" => "1500"],
+                    "sellingCosts" => ["label" => "Selling Costs (%)", "value" => "4"],
+                    "vacancyAllowance" => ["label" => "Vacancy Allowance (%)", "value" => "5"]
+                ];
+            ?>
+
+                <div class="col-md-6">
+                    <!-- the key inputs table -->
+                    <form id="financialAnalysisFormKeyInputs">
+                        <table class="investment-summary-cashflow">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Key inputs</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><label for="purchasePrice"><?= $inputs['purchasePrice']['label'] ?>:</label></td>
+                                    <td><input class="input-light-blue" id="purchasePrice" value="<?= $inputs['purchasePrice']['value'] ?>"></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="downpaymentPercentage"><?= $inputs['downpaymentPercentage']['label'] ?>:</label></td>
+                                    <td><input class="input-light-blue" id="downpaymentPercentage" value="<?= $inputs['downpaymentPercentage']['value'] ?>"></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="appreciationPercentage"><?= $inputs['appreciationPercentage']['label'] ?>:</label></td>
+                                    <td><input class="input-light-blue" id="appreciationPercentage" value="<?= $inputs['appreciationPercentage']['value'] ?>"></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="holdingPeriod"><?= $inputs['holdingPeriod']['label'] ?>:</label></td>
+                                    <td><input class="input-light-blue" id="holdingPeriod" value="<?= $inputs['holdingPeriod']['value'] ?>"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-12">
+                    <table class="rent-table">
+                        <thead>
+                            <tr>
+                                <th>Unit Type</th>
+                                <th># of Units</th>
+                                <th>Rent <span class="sub-heading">(per Unit)</span></th>
+                                <th>Total Rent</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $totalUnits = 0; $totalRent = 0; ?>
+
+                            <tr class="rent-row">
+                                <td>3 bdrms</td>
+                                <td><input type="number" class="units" value="<?= $property['3_bedroom_units'] ?: '' ?>"></td>
+                                <td><input type="number" class="rent-per-unit" value="<?= $property['3_bedroom_units'] ? $property['3_bedroom_rent'] : '' ?>"></td>
+                                <td class="total-rent"><?= ($totalRent += $property['3_bedroom_units'] * $property['3_bedroom_rent']) ?: '' ?></td>
+                            </tr>
+
+                            <tr class="rent-row">
+                                <td>2 bdrms</td>
+                                <td><input type="number" class="units" value="<?= $property['2_bedroom_units'] ?: '' ?>"></td>
+                                <td><input type="number" class="rent-per-unit" value="<?= $property['2_bedroom_units'] ? $property['2_bedroom_rent'] : '' ?>"></td>
+                                <td class="total-rent"><?= ($totalRent += $property['2_bedroom_units'] * $property['2_bedroom_rent']) ?: '' ?></td>
+                            </tr>
+
+                            <tr class="rent-row">
+                                <td>1 bdrms</td>
+                                <td><input type="number" class="units" value="<?= $property['1_bedroom_units'] ?: '' ?>"></td>
+                                <td><input type="number" class="rent-per-unit" value="<?= $property['1_bedroom_units'] ? $property['1_bedroom_rent'] : '' ?>"></td>
+                                <td class="total-rent"><?= ($totalRent += $property['1_bedroom_units'] * $property['1_bedroom_rent']) ?: '' ?></td>
+                            </tr>
+
+                            <tr class="rent-row">
+                                <td>Bachelors</td>
+                                <td><input type="number" class="units" value="<?= $property['0_bedroom_units'] ?: '' ?>"></td>
+                                <td><input type="number" class="rent-per-unit" value="<?= $property['0_bedroom_units'] ? $property['0_bedroom_rent'] : '' ?>"></td>
+                                <td class="total-rent"><?= ($totalRent += $property['0_bedroom_units'] * $property['0_bedroom_rent']) ?: '' ?></td>
+                            </tr>
+
+                            <!-- Totals Row -->
+                            <tr>
+                                <td><strong>Total</strong></td>
+                                <td><strong id="totalUnits"><?= $totalUnits ?></strong></td>
+                                <td></td>
+                                <td><strong id="totalRentDisplay"></strong></td>
+                                <input type="hidden" id="monthlyRent" value="0">
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
     </div>
-
-    <button class="photo-nav prev" onclick="prevPhoto()">&#8592;</button>
-    <button class="photo-nav next" onclick="nextPhoto()">&#8594;</button>
 </div>
-
-<div class="property-price-cashflow">
-    $<?= number_format($property['Price']) ?>
-</div>
-<div class="property-address-cashflow">
-    <?= $property['Address'] ?>
-</div>
-<button class="button-common agent-button">Speak to an Agent</button>
 
 <!-- units + rent table -->
-<table class="rent-table">
-    <thead>
-        <tr>
-            <th>Unit Type</th>
-            <th># of Units</th>
-            <th>Rent <span class="sub-heading">(per Unit)</span></th>
-            <th>Total Rent</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php $totalUnits = 0; $totalRent = 0; ?>
-
-        <tr class="rent-row">
-            <td>3 bdrms</td>
-            <td><input type="number" class="units" value="<?= $property['3_bedroom_units'] ?: '' ?>"></td>
-            <td><input type="number" class="rent-per-unit" value="<?= $property['3_bedroom_units'] ? $property['3_bedroom_rent'] : '' ?>"></td>
-            <td class="total-rent"><?= ($totalRent += $property['3_bedroom_units'] * $property['3_bedroom_rent']) ?: '' ?></td>
-        </tr>
-
-        <tr class="rent-row">
-            <td>2 bdrms</td>
-            <td><input type="number" class="units" value="<?= $property['2_bedroom_units'] ?: '' ?>"></td>
-            <td><input type="number" class="rent-per-unit" value="<?= $property['2_bedroom_units'] ? $property['2_bedroom_rent'] : '' ?>"></td>
-            <td class="total-rent"><?= ($totalRent += $property['2_bedroom_units'] * $property['2_bedroom_rent']) ?: '' ?></td>
-        </tr>
-
-        <tr class="rent-row">
-            <td>1 bdrms</td>
-            <td><input type="number" class="units" value="<?= $property['1_bedroom_units'] ?: '' ?>"></td>
-            <td><input type="number" class="rent-per-unit" value="<?= $property['1_bedroom_units'] ? $property['1_bedroom_rent'] : '' ?>"></td>
-            <td class="total-rent"><?= ($totalRent += $property['1_bedroom_units'] * $property['1_bedroom_rent']) ?: '' ?></td>
-        </tr>
-
-        <tr class="rent-row">
-            <td>Bachelors</td>
-            <td><input type="number" class="units" value="<?= $property['0_bedroom_units'] ?: '' ?>"></td>
-            <td><input type="number" class="rent-per-unit" value="<?= $property['0_bedroom_units'] ? $property['0_bedroom_rent'] : '' ?>"></td>
-            <td class="total-rent"><?= ($totalRent += $property['0_bedroom_units'] * $property['0_bedroom_rent']) ?: '' ?></td>
-        </tr>
-
-        <!-- Totals Row -->
-        <tr>
-            <td><strong>Total</strong></td>
-            <td><strong id="totalUnits"><?= $totalUnits ?></strong></td>
-            <td></td>
-            <td><strong id="totalRentDisplay"></strong></td>
-            <input type="hidden" id="monthlyRent" value="0">
-        </tr>
-    </tbody>
-</table>
-
-<!-- set up fields / rows for the user inputs and cash flow analysis tables -->
-<?php
-    $analysisItems = [
-        "initialInvestment" => "Initial Investment",
-        "mortgageExpenses" => "Mortgage Expenses",
-        "expenses" => "Other expenses",
-        "income" => "Rental income",
-        "proceedsFromSale" => "Proceeds from Sale",
-        "netCashFlow" => "Net Cash Flow"
-    ];
-?>
-
-<!-- investment summary table -->
-<table id="investment-summary-cashflow">
-    <thead>
-        <tr>
-            <th colspan="2">Investment Summary</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Initial Investment</td>
-            <td id="initialInvestmentValue">-</td>
-        </tr>
-        <tr>
-            <td>Annual Return</td>
-            <td id="irrValue">-</td>
-        </tr>
-        <tr>
-            <td>Cap Rate</td>
-            <td id="capRateValue">-</td>
-        </tr>
-        <tr>
-            <td>Monthly Cash Flow</td>
-            <td id="monthlyCashFlowValue">-</td>
-        </tr>
-        <tr>
-            <td>Annual NOI</td>
-            <td id="noiValue">-</td>
-        </tr>
-    </tbody>
-</table>
-
-<!-- set the initial values of the user inputs tables -->
-<?php
-    $inputs = [
-        "purchasePrice" => ["label" => "Purchase Price ($)", "value" => $property['Price']],
-        "downpaymentPercentage" => ["label" => "Downpayment (%)", "value" => "20"],
-        "monthlyRent" => ["label" => "Monthly Rent ($)", "value" => $totalRent, "readonly" => true],
-        "propertyTax" => ["label" => "Property Tax ($)", "value" => intval(preg_replace('/[,.]/', '', substr($property['Property taxes'], 1, 6))) , "readonly" => true],
-        "appreciationPercentage" => ["label" => "Appreciation (%)", "value" => "6"],
-        "holdingPeriod" => ["label" => "Holding Period (Years)", "value" => "5"],
-        "mortgageRate" => ["label" => "Mortgage Rate (%)", "value" => "6"],
-        "renovationCosts" => ["label" => "Renovation Costs ($)", "value" => "0"],
-        "mortgageTerm" => ["label" => "Mortgage Term (Years)", "value" => "30"],
-        "landTransferTaxPercentage" => ["label" => "Land Transfer Tax (%)", "value" => "4"],
-        "monthlyCapexReserve" => ["label" => "Monthly CapEx Reserve ($)", "value" => "400"],
-        "annualInsurance" => ["label" => "Annual Insurance ($)", "value" => "1500"],
-        "sellingCosts" => ["label" => "Selling Costs (%)", "value" => "4"],
-        "vacancyAllowance" => ["label" => "Vacancy Allowance (%)", "value" => "5"]
-    ];
-?>
-
-<!-- the key inputs table -->
-<form id="financialAnalysisFormKeyInputs">
-    <table class="investment-summary-cashflow">
-        <thead>
-            <tr>
-                <th colspan="2">Key inputs</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><label for="purchasePrice"><?= $inputs['purchasePrice']['label'] ?>:</label></td>
-                <td><input class="input-light-blue" id="purchasePrice" value="<?= $inputs['purchasePrice']['value'] ?>"></td>
-            </tr>
-            <tr>
-                <td><label for="downpaymentPercentage"><?= $inputs['downpaymentPercentage']['label'] ?>:</label></td>
-                <td><input class="input-light-blue" id="downpaymentPercentage" value="<?= $inputs['downpaymentPercentage']['value'] ?>"></td>
-            </tr>
-            <tr>
-                <td><label for="appreciationPercentage"><?= $inputs['appreciationPercentage']['label'] ?>:</label></td>
-                <td><input class="input-light-blue" id="appreciationPercentage" value="<?= $inputs['appreciationPercentage']['value'] ?>"></td>
-            </tr>
-            <tr>
-                <td><label for="holdingPeriod"><?= $inputs['holdingPeriod']['label'] ?>:</label></td>
-                <td><input class="input-light-blue" id="holdingPeriod" value="<?= $inputs['holdingPeriod']['value'] ?>"></td>
-            </tr>
-        </tbody>
-    </table>
-</form>
 
 <button id="recalculateButton" class="button-common agent-button">Recalculate</button>
     <p id="errorMessage" style="color: #cc0000; font-size: 0.8rem;"></p>
