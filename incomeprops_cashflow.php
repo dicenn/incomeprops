@@ -376,6 +376,80 @@
 </div>
 
 <div id="PropertyDetails" class="tabcontent">
+    <table class="investment-summary-cashflow">
+        <tr>
+            <td>Bedrooms</td>
+            <td><input type="text" value="<?= $property['Bedrooms'] ?: '' ?>"></td>
+        </tr>
+        <tr>
+            <td>Bathrooms</td>
+            <td><input type="text" value="<?= $property['Bathrooms'] ?: '' ?>"></td>
+        </tr>
+        <tr>
+            <td>When Listed</td>
+            <td><input type="text" value="<?= $property['listingCardTagLabel'] ?: '' ?>"></td>
+        </tr>
+        <tr>
+            <td>MLS Number</td>
+            <td><input type="text" value="<?= $property['MLS_number'] ?: '' ?>"></td>
+        </tr>
+        <tr>
+            <td>Agent</td>
+            <td><input type="text" value="<?= $property['Agent'] ?: '' ?>"></td>
+        </tr>
+        <tr>
+            <td>Agent Phone Number</td>
+            <td><input type="text" value="<?= $property['Agent_phone_number'] ?: '' ?>"></td>
+        </tr>
+        <tr>
+            <td>Building Type</td>
+            <td><input type="text" value="<?= $property['Building type'] ?: '' ?>"></td>
+        </tr>
+        <tr>
+            <td>Stories</td>
+            <td><input type="text" value="<?= $property['Storys'] ?: '' ?>"></td>
+        </tr>
+        <tr>
+            <td>Community Name</td>
+            <td><input type="text" value="<?= $property['Community name'] ?: '' ?>"></td>
+        </tr>
+        <tr>
+            <td>Property Taxes</td>
+            <td><input type="text" value="<?= $property['Property taxes'] ?: '' ?>"></td>
+        </tr>
+        <tr>
+            <td>Lot Size</td>
+            <td><input type="text" value="<?= $property['Lot size'] ?: '' ?>"></td>
+        </tr>
+        <tr>
+            <td>Number of Units</td>
+            <td><input type="text" value="<?= $property['num_units'] ?: '' ?>"></td>
+        </tr>
+        <tr>
+            <td>Above Grade Bedrooms</td>
+            <td><input type="text" value="<?= $property['Above_grade_bedrooms'] ?: '' ?>"></td>
+        </tr>
+        <tr>
+            <td>Above Grade Bathrooms</td>
+            <td><input type="text" value="<?= $property['Above_grade_bathrooms'] ?: '' ?>"></td>
+        </tr>
+        <tr>
+            <td>Basement Features</td>
+            <td><input type="text" value="<?= $property['Basement_features'] ?: '' ?>"></td>
+        </tr>
+        <tr>
+            <td>Parking Spaces</td>
+            <td><input type="text" value="<?= $property['Parking_spaces'] ?: '' ?>"></td>
+        </tr>
+    </table>
+
+    <p>Description: <?= htmlspecialchars($property['Description']) ?: 'N/A' ?></p>
+
+    <div class="brokerage-section">
+        <p>Brokerage: <?= htmlspecialchars($property['Brokerage']) ?: 'N/A' ?></p>
+        <img src="<?= $property['Brokerage_logo'] ?: 'path/to/default/logo.png' ?>" alt="Brokerage Logo" class="brokerage-logo">
+        <img src="<?= $property['Listing_agent_photo'] ?: 'path/to/default/agent/photo.png' ?>" alt="Listing Agent Photo" class="listing-agent-photo">
+    </div>
 </div>
 
 <!-- calling the js scripts and functions needed to update the user inputs, cash flow ananlysis and investment summary tables -->
