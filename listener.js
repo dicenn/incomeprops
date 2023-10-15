@@ -1,10 +1,12 @@
 document.addEventListener("DOMContentLoaded", function() {
     const bodyDataPage = document.body.getAttribute("data-page");
 
+    // does diffeerent things based on which page you're currently on
     if (bodyDataPage === "cashflow") {
         document.getElementById("defaultOpen").click();
         console.log(document.getElementById('recalculateButton')); // It should print the button element
 
+        // responds to clicks of the speak to agent, recalculate and restore defaults buttons
         document.getElementById('recalculateButton').addEventListener('click', function() {
             console.log("Button was clicked");
             if (validateInputs()) {
@@ -16,6 +18,18 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById("restore-button").addEventListener("click", function() {
             location.reload();
         });
+
+        // will figure out if the photo displayed is in portrait or landscape orientation and then apply styles based on that
+        const image = document.getElementById('currentPhoto');
+        if (image) { // To ensure the image element exists on the page
+            if (image.naturalWidth > image.naturalHeight) {
+                // Landscape
+                image.classList.add('landscape');
+            } else {
+                // Portrait
+                image.classList.add('portrait');
+            }
+        }
 
         updateCashFlowAnalysisTable();
     }

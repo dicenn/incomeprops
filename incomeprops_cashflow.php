@@ -25,6 +25,18 @@
     closeConnection();
 ?>
 
+<div class="header-band">
+    <div class="site-name">
+        <a href="http://localhost:8888/incomeprops/incomeprops_landing.php" class="site-name-link">incomeprops.ca</a>
+    </div>
+    <div class="nav-links">
+        <a href="#">Properties</a>
+        <a href="#">Blog</a>
+        <a href="#">About us</a>
+        <a href="#">Sign up</a>
+        <a href="#">Login</a>
+    </div>
+</div>
 
 <!-- define the variables needed for the photo navigation -->
 <script>
@@ -42,7 +54,7 @@
     <div class="row">
 
         <!-- photos section -->
-        <div class="col-lg-4">
+        <div class="col-lg-5">
             <div class="photos-section">
                 <img id="currentPhoto" src="<?= $property['Pic1'] ?>">
                 
@@ -58,7 +70,7 @@
             </div>
         </div>
 
-        <div class="col-lg-8">
+        <div class="col-lg-7">
             <div class="d-flex flex-column flex-lg-row">
                 <div>
                     <div class="property-price-cashflow">

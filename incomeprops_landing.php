@@ -148,7 +148,7 @@
 
 <!-- link to packages and files that the landing page deoends on -->
 <script src="https://cdn.jsdelivr.net/npm/financejs@4.1.0/finance.js"></script>
-<script src="cash_flow_calc.js"></script>
+<script src="ip_functions.js"></script>
 <script src="listener.js"></script>
 
 </body>
