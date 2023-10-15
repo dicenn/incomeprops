@@ -260,165 +260,169 @@
                 <button class="tablink" onclick="openContent(event, 'PropertyDetails')">Property Details</button>
             </div>
 
-            <!-- financial analysis tab -->
             <div id="FinancialAnalysis" class="tabcontent">
-                <!-- the other inputs table -->
-                <form id="financialAnalysisFormOtherInputs">
-                    <table class="investment-summary-cashflow">
-                        <thead>
-                            <tr>
-                                <th colspan="2">Other inputs</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- <tr>
-                                <td><label for="monthlyRent"><?= $inputs['monthlyRent']['label'] ?>:</label></td>
-                                <td><input class="input-light-blue" id="monthlyRent" value="<?= $inputs['monthlyRent']['value'] ?>" readonly></td>
-                            </tr> -->
-                            <tr>
-                                <td><label for="propertyTax"><?= $inputs['propertyTax']['label'] ?>:</label></td>
-                                <td><input class="input-light-blue" id="propertyTax" value="<?= $inputs['propertyTax']['value'] ?>" readonly></td>
-                            </tr>
-                            <tr>
-                                <td><label for="mortgageRate"><?= $inputs['mortgageRate']['label'] ?>:</label></td>
-                                <td><input class="input-light-blue" id="mortgageRate" value="<?= $inputs['mortgageRate']['value'] ?>"></td>
-                            </tr>
-                            <tr>
-                                <td><label for="renovationCosts"><?= $inputs['renovationCosts']['label'] ?>:</label></td>
-                                <td><input class="input-light-blue" id="renovationCosts" value="<?= $inputs['renovationCosts']['value'] ?>"></td>
-                            </tr>
-                            <tr>
-                                <td><label for="mortgageTerm"><?= $inputs['mortgageTerm']['label'] ?>:</label></td>
-                                <td><input class="input-light-blue" id="mortgageTerm" value="<?= $inputs['mortgageTerm']['value'] ?>"></td>
-                            </tr>
-                            <tr>
-                                <td><label for="landTransferTaxPercentage"><?= $inputs['landTransferTaxPercentage']['label'] ?>:</label></td>
-                                <td><input class="input-light-blue" id="landTransferTaxPercentage" value="<?= $inputs['landTransferTaxPercentage']['value'] ?>"></td>
-                            </tr>
-                            <tr>
-                                <td><label for="monthlyCapexReserve"><?= $inputs['monthlyCapexReserve']['label'] ?>:</label></td>
-                                <td><input class="input-light-blue" id="monthlyCapexReserve" value="<?= $inputs['monthlyCapexReserve']['value'] ?>"></td>
-                            </tr>
-                            <tr>
-                                <td><label for="annualInsurance"><?= $inputs['annualInsurance']['label'] ?>:</label></td>
-                                <td><input class="input-light-blue" id="annualInsurance" value="<?= $inputs['annualInsurance']['value'] ?>"></td>
-                            </tr>
-                            <tr>
-                                <td><label for="sellingCosts"><?= $inputs['sellingCosts']['label'] ?>:</label></td>
-                                <td><input class="input-light-blue" id="sellingCosts" value="<?= $inputs['sellingCosts']['value'] ?>"></td>
-                            </tr>
-                            <tr>
-                                <td><label for="vacancyAllowance"><?= $inputs['vacancyAllowance']['label'] ?>:</label></td>
-                                <td><input class="input-light-blue" id="vacancyAllowance" value="<?= $inputs['vacancyAllowance']['value'] ?>"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </form>
+                <div class="row">
+                    <!-- cash flow analysis table on the left -->
+                    <div class="col-lg-6 col-12">
+                        <div class="cashflow-analysis-section">
+                            <table>
+                                <thead id="cashflow-thead">
+                                    <tr>
+                                        <th>Cash flow analysis</th>
+                                        <th>Year 0</th>
 
-                <!-- the cah flow analysis table -->
-                <div class="cashflow-analysis-section">
-                    <table>
-                        <thead id="cashflow-thead">
-                            <tr>
-                                <th>Cash flow analysis</th>
-                                <th>Year 0</th>
+                                        <?php if ($inputs["holdingPeriod"]["value"] < 3): ?>
+                                            <th>Year 1 - <?= ($inputs["holdingPeriod"]["value"] - 1) ?> <span class="cashflow-sub-heading">(annually)</span></th>
+                                        <?php endif; ?>
 
-                                <?php if ($inputs["holdingPeriod"]["value"] < 3): ?>
-                                    <th>Year 1 - <?= ($inputs["holdingPeriod"]["value"] - 1) ?> <span class="cashflow-sub-heading">(annually)</span></th>
-                                <?php endif; ?>
+                                        <?php if ($inputs["holdingPeriod"]["value"] == 3): ?>
+                                            <th>Year 2</th>
+                                        <?php endif; ?>
 
-                                <?php if ($inputs["holdingPeriod"]["value"] == 3): ?>
-                                    <th>Year 2</th>
-                                <?php endif; ?>
+                                        <?php if ($inputs["holdingPeriod"]["value"] >= 3): ?>
+                                            <th>Year 1 - <?= ($inputs["holdingPeriod"]["value"] - 1) ?> <span class="cashflow-sub-heading">(annually)</span></th>
+                                            <th>Year <?= $inputs["holdingPeriod"]["value"] ?></th>
+                                        <?php endif; ?>
+                                    </tr>
+                                </thead>
+                                <tbody id="cashflow-tbody">
+                                    <!-- Cash Outflows Row -->
+                                    <tr class="cashflow-highlight">
+                                        <td>Cash outflows</td>
+                                        <td id="outflowsYear0"></td>
+                                        <td id="outflowsYear1"></td>
+                                        <?php if ($inputs["holdingPeriod"]["value"] >= 2): ?>
+                                            <td id="outflowsYearN"></td>
+                                        <?php endif; ?>
+                                    </tr>
 
-                                <?php if ($inputs["holdingPeriod"]["value"] >= 3): ?>
-                                    <th>Year 1 - <?= ($inputs["holdingPeriod"]["value"] - 1) ?> <span class="cashflow-sub-heading">(annually)</span></th>
-                                    <th>Year <?= $inputs["holdingPeriod"]["value"] ?></th>
-                                <?php endif; ?>
-                            </tr>
-                        </thead>
-                        <tbody id="cashflow-tbody">
-                            <!-- Cash Outflows Row -->
-                            <tr class="cashflow-highlight">
-                                <td>Cash outflows</td>
-                                <td id="outflowsYear0"></td>
-                                <td id="outflowsYear1"></td>
-                                <?php if ($inputs["holdingPeriod"]["value"] >= 2): ?>
-                                    <td id="outflowsYearN"></td>
-                                <?php endif; ?>
-                            </tr>
+                                    <!-- Initial Investment Row -->
+                                    <tr class="indented-row">
+                                        <td>Initial Investment</td>
+                                        <td id="initialInvestmentYear0"></td>
+                                        <td id="initialInvestmentYear1"></td>
+                                        <?php if ($inputs["holdingPeriod"]["value"] >= 2): ?>
+                                            <td id="initialInvestmentYearN"></td>
+                                        <?php endif; ?>
+                                    </tr>
 
-                            <!-- Initial Investment Row -->
-                            <tr class="indented-row">
-                                <td>Initial Investment</td>
-                                <td id="initialInvestmentYear0"></td>
-                                <td id="initialInvestmentYear1"></td>
-                                <?php if ($inputs["holdingPeriod"]["value"] >= 2): ?>
-                                    <td id="initialInvestmentYearN"></td>
-                                <?php endif; ?>
-                            </tr>
+                                    <!-- Mortgage Expenses Row -->
+                                    <tr class="indented-row">
+                                        <td>Mortgage Expenses</td>
+                                        <td id="mortgageExpensesYear0"></td>
+                                        <td id="mortgageExpensesYear1"></td>
+                                        <?php if ($inputs["holdingPeriod"]["value"] >= 2): ?>
+                                            <td id="mortgageExpensesYearN"></td>
+                                        <?php endif; ?>
+                                    </tr>
 
-                            <!-- Mortgage Expenses Row -->
-                            <tr class="indented-row">
-                                <td>Mortgage Expenses</td>
-                                <td id="mortgageExpensesYear0"></td>
-                                <td id="mortgageExpensesYear1"></td>
-                                <?php if ($inputs["holdingPeriod"]["value"] >= 2): ?>
-                                    <td id="mortgageExpensesYearN"></td>
-                                <?php endif; ?>
-                            </tr>
+                                    <!-- Other Expenses Row -->
+                                    <tr class="indented-row">
+                                        <td>Other expenses</td>
+                                        <td id="expensesYear0"></td>
+                                        <td id="expensesYear1"></td>
+                                        <?php if ($inputs["holdingPeriod"]["value"] >= 2): ?>
+                                            <td id="expensesYearN"></td>
+                                        <?php endif; ?>
+                                    </tr>
 
-                            <!-- Other Expenses Row -->
-                            <tr class="indented-row">
-                                <td>Other expenses</td>
-                                <td id="expensesYear0"></td>
-                                <td id="expensesYear1"></td>
-                                <?php if ($inputs["holdingPeriod"]["value"] >= 2): ?>
-                                    <td id="expensesYearN"></td>
-                                <?php endif; ?>
-                            </tr>
+                                    <!-- Cash Inflows Row -->
+                                    <tr class="cashflow-highlight">
+                                        <td>Cash inflows</td>
+                                        <td id="inflowsYear0"></td>
+                                        <td id="inflowsYear1"></td>
+                                        <?php if ($inputs["holdingPeriod"]["value"] >= 2): ?>
+                                            <td id="inflowsYearN"></td>
+                                        <?php endif; ?>
+                                    </tr>
 
-                            <!-- Cash Inflows Row -->
-                            <tr class="cashflow-highlight">
-                                <td>Cash inflows</td>
-                                <td id="inflowsYear0"></td>
-                                <td id="inflowsYear1"></td>
-                                <?php if ($inputs["holdingPeriod"]["value"] >= 2): ?>
-                                    <td id="inflowsYearN"></td>
-                                <?php endif; ?>
-                            </tr>
+                                    <!-- Rental Income Row -->
+                                    <tr class="indented-row">
+                                        <td>Rental income</td>
+                                        <td id="incomeYear0"></td>
+                                        <td id="incomeYear1"></td>
+                                        <?php if ($inputs["holdingPeriod"]["value"] >= 2): ?>
+                                            <td id="incomeYearN"></td>
+                                        <?php endif; ?>
+                                    </tr>
 
-                            <!-- Rental Income Row -->
-                            <tr class="indented-row">
-                                <td>Rental income</td>
-                                <td id="incomeYear0"></td>
-                                <td id="incomeYear1"></td>
-                                <?php if ($inputs["holdingPeriod"]["value"] >= 2): ?>
-                                    <td id="incomeYearN"></td>
-                                <?php endif; ?>
-                            </tr>
+                                    <!-- Proceeds from Sale Row -->
+                                    <tr class="indented-row">
+                                        <td>Proceeds from Sale</td>
+                                        <td id="proceedsFromSaleYear0"></td>
+                                        <td id="proceedsFromSaleYear1"></td>
+                                        <?php if ($inputs["holdingPeriod"]["value"] >= 2): ?>
+                                            <td id="proceedsFromSaleYearN"></td>
+                                        <?php endif; ?>
+                                    </tr>
 
-                            <!-- Proceeds from Sale Row -->
-                            <tr class="indented-row">
-                                <td>Proceeds from Sale</td>
-                                <td id="proceedsFromSaleYear0"></td>
-                                <td id="proceedsFromSaleYear1"></td>
-                                <?php if ($inputs["holdingPeriod"]["value"] >= 2): ?>
-                                    <td id="proceedsFromSaleYearN"></td>
-                                <?php endif; ?>
-                            </tr>
+                                    <!-- Net Cash Flow Row -->
+                                    <tr>
+                                        <td>Net Cash Flow</td>
+                                        <td id="netCashFlowYear0"></td>
+                                        <td id="netCashFlowYear1"></td>
+                                        <?php if ($inputs["holdingPeriod"]["value"] >= 2): ?>
+                                            <td id="netCashFlowYearN"></td>
+                                        <?php endif; ?>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
-                            <!-- Net Cash Flow Row -->
-                            <tr>
-                                <td>Net Cash Flow</td>
-                                <td id="netCashFlowYear0"></td>
-                                <td id="netCashFlowYear1"></td>
-                                <?php if ($inputs["holdingPeriod"]["value"] >= 2): ?>
-                                    <td id="netCashFlowYearN"></td>
-                                <?php endif; ?>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="col-lg-6 col-12 mt-4 mt-lg-0">
+                        <form id="financialAnalysisFormOtherInputs">
+                            <table class="investment-summary-cashflow">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">Other inputs</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- <tr>
+                                        <td><label for="monthlyRent"><?= $inputs['monthlyRent']['label'] ?>:</label></td>
+                                        <td><input class="input-light-blue" id="monthlyRent" value="<?= $inputs['monthlyRent']['value'] ?>" readonly></td>
+                                    </tr> -->
+                                    <tr>
+                                        <td><label for="propertyTax"><?= $inputs['propertyTax']['label'] ?>:</label></td>
+                                        <td><input class="input-light-blue" id="propertyTax" value="<?= $inputs['propertyTax']['value'] ?>" readonly></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="mortgageRate"><?= $inputs['mortgageRate']['label'] ?>:</label></td>
+                                        <td><input class="input-light-blue" id="mortgageRate" value="<?= $inputs['mortgageRate']['value'] ?>"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="renovationCosts"><?= $inputs['renovationCosts']['label'] ?>:</label></td>
+                                        <td><input class="input-light-blue" id="renovationCosts" value="<?= $inputs['renovationCosts']['value'] ?>"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="mortgageTerm"><?= $inputs['mortgageTerm']['label'] ?>:</label></td>
+                                        <td><input class="input-light-blue" id="mortgageTerm" value="<?= $inputs['mortgageTerm']['value'] ?>"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="landTransferTaxPercentage"><?= $inputs['landTransferTaxPercentage']['label'] ?>:</label></td>
+                                        <td><input class="input-light-blue" id="landTransferTaxPercentage" value="<?= $inputs['landTransferTaxPercentage']['value'] ?>"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="monthlyCapexReserve"><?= $inputs['monthlyCapexReserve']['label'] ?>:</label></td>
+                                        <td><input class="input-light-blue" id="monthlyCapexReserve" value="<?= $inputs['monthlyCapexReserve']['value'] ?>"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="annualInsurance"><?= $inputs['annualInsurance']['label'] ?>:</label></td>
+                                        <td><input class="input-light-blue" id="annualInsurance" value="<?= $inputs['annualInsurance']['value'] ?>"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="sellingCosts"><?= $inputs['sellingCosts']['label'] ?>:</label></td>
+                                        <td><input class="input-light-blue" id="sellingCosts" value="<?= $inputs['sellingCosts']['value'] ?>"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="vacancyAllowance"><?= $inputs['vacancyAllowance']['label'] ?>:</label></td>
+                                        <td><input class="input-light-blue" id="vacancyAllowance" value="<?= $inputs['vacancyAllowance']['value'] ?>"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
                 </div>
             </div>
 
