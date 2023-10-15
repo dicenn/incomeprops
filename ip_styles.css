@@ -208,12 +208,15 @@ body {
 }
 
 /* Styles created for the detail page formatting */
+/* Adjusted CSS */
 .photos-section {
     position: relative;
-    width: 100%; /* Take full width of the parent */
+    max-width: 600px; /* Set a maximum width for the photos-section */
+    width: 100%; /* Take full width of the parent, but won't exceed the max-width */
     padding-top: 75%; /* 4:3 aspect ratio; Adjust as needed */
     background-color: #333; /* Or any color you desire for side fillers */
     overflow: hidden; /* Keeps the content of the box within its boundaries */
+    margin: 0 auto; /* centers the photos-section when it's the only column */
 }
 
 /* General styles */
@@ -590,4 +593,7 @@ body {
 @keyframes fadeEffect {
     from {opacity: 0.4;}
     to {opacity: 1;}
+}
+.container {
+    max-width: 1200px; /* or whatever value you prefer */
 }
