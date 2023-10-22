@@ -27,7 +27,7 @@
 
 <div class="header-band">
     <div class="site-name">
-        <a href="http://localhost:8888/incomeprops/incomeprops_landing.php" class="site-name-link">incomeprops.ca</a>
+        <a href="http://localhost/incomeprops/incomeprops_landing.php" class="site-name-link">incomeprops.ca</a>
     </div>
     <div class="nav-links">
         <a href="#">Properties</a>

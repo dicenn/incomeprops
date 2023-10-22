@@ -13,7 +13,7 @@
 <!-- site header -->
 <div class="header-band">
     <div class="site-name">
-        <a href="http://localhost:8888/incomeprops/incomeprops_landing.php" class="site-name-link">incomeprops.ca</a>
+        <a href="http://localhost/incomeprops/incomeprops_landing.php" class="site-name-link">incomeprops.ca</a>
     </div>
     <div class="nav-links">
         <a href="#">Properties</a>
@@ -70,7 +70,7 @@
         <div class="filter-item filter-submit">
             <input type="submit" class="filter-input" value="Filter Properties">
         </div>
-        <button type="button" class="filter-clear" onclick="window.location.href='http://localhost:8888/incomeprops/incomeprops_landing.php'">Clear Filters</button>
+        <button type="button" class="filter-clear" onclick="window.location.href='http://localhost/incomeprops/incomeprops_landing.php'">Clear Filters</button>
     </form>
 </div>
 

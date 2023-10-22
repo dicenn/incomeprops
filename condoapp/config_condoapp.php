@@ -1,8 +1,8 @@
 <?php
 $host = 'localhost';
-$db = 'income_props';
+$db = 'condo_app';
 $user = 'root';
-$pass = 'root';
+$pass = '';
 $charset = 'utf8mb4';
 
 $conn = mysqli_connect($host, $user, $pass, $db);
@@ -10,7 +10,7 @@ $conn = mysqli_connect($host, $user, $pass, $db);
 // Set charset
 mysqli_set_charset($conn, $charset);
 
-// // Check connection
+// Check connection
 // if (!$conn) {
 //     die("Connection failed: " . mysqli_connect_error());
 // }

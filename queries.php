@@ -1,13 +1,13 @@
 <?php
 // functions.php
 
-include 'config.php';
+include 'config_incomeprops.php';
 
 function getProperties($num_units = "all", $min_price = null, $max_price = null, $city = null) {
     global $conn;
     $properties = array();
 
-    $query = "SELECT * FROM income_props.toronto_duplexes_lean_v8 WHERE 1=1";  // "WHERE 1=1" is a trick to avoid dealing with leading "AND"s
+    $query = "SELECT * FROM income_props.toronto_duplexes_lean_v8 WHERE 1=1";
 
     if (!empty($num_units) && $num_units !== "all") { $query .= " AND num_units >= '$num_units'";}
     if (!empty($min_price)) { $query .= " AND Price >= $min_price";}
