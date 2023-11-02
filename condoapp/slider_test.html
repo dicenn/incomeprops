@@ -1,0 +1,53 @@
+<?php
+// Include your database configuration
+include 'config_condoapp.php';
+
+function getInitialRent() {
+    global $conn;
+    $query = "SELECT rent FROM condo_app.precon_cashflows_20231021_v8 LIMIT 1"; // Modify the query to suit your needs
+    $result = mysqli_query($conn, $query);
+
+    if ($row = mysqli_fetch_assoc($result)) {
+        return $row['rent']; // Assuming 'rent' is the column name
+    }
+    return null;
+}
+
+$initialRent = getInitialRent();
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Slider Test</title>
+</head>
+<body>
+    <h2>Slider Test</h2>
+
+    <label for="rentSlider">Rent:</label>
+    <input type="range" id="rentSlider" min="1000" max="3000" step="100">
+    <div id="rentValue">$<?php echo $initialRent; ?></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var rentSlider = document.getElementById('rentSlider');
+            var rentValue = document.getElementById('rentValue');
+
+            // Set initial rent value from PHP
+            var initialRent = <?php echo $initialRent; ?>;
+            rentSlider.value = initialRent;
+            rentValue.textContent = '$' + initialRent;
+
+            // Event listener for the slider
+            rentSlider.addEventListener('input', function() {
+                rentValue.textContent = '$' + this.value;
+            });
+
+            // Logging initial values
+            console.log("Initial Rent from DB: ", initialRent);
+            console.log("Slider Initial Value: ", rentSlider.value);
+        });
+    </script>
+</body>
+</html>

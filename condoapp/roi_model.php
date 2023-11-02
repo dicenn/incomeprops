@@ -9,7 +9,7 @@ error_reporting(E_ALL);
 // Function to get distinct projects, models, and units
 function getDistinctProjectModelUnit() {
     global $conn;
-    $query = "SELECT DISTINCT project, model, unit FROM condo_app.precon_cashflows_20231021_v7";
+    $query = "SELECT DISTINCT project, model, unit FROM condo_app.precon_cashflows_20231021_v8";
     $result = mysqli_query($conn, $query);
     $data = [];
     while ($row = mysqli_fetch_assoc($result)) {
@@ -20,7 +20,7 @@ function getDistinctProjectModelUnit() {
 
 function getData() {
     global $conn;
-    $query = "SELECT * FROM condo_app.precon_cashflows_20231021_v7";
+    $query = "SELECT * FROM condo_app.precon_cashflows_20231021_v8";
     $result = mysqli_query($conn, $query);
     $cashflows = [];
     while ($row = mysqli_fetch_assoc($result)) {
@@ -29,10 +29,11 @@ function getData() {
             // Try to decode each field as JSON
             $decodedValue = json_decode($value, true);
             
-            // Check if json_decode was successful and if it's actually an array (not a number or string)
-            if (json_last_error() == JSON_ERROR_NONE && is_array($decodedValue)) {
+            // Check if json_decode was successful and if it's not null
+            if (json_last_error() == JSON_ERROR_NONE && $decodedValue !== null) {
                 $row[$key] = $decodedValue;
             }
+            // If it's not JSON or null, the value remains as is
         }
         $cashflows[] = $row;
     }
@@ -63,7 +64,7 @@ if (isset($_GET['json'])) {
     <title>Investment Metrics</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body>
+<body style="display: none;">
 
     <h1>Investment Metrics</h1>
 
@@ -106,18 +107,17 @@ if (isset($_GET['json'])) {
         <h2>Value Sliders</h2>
         
         <label for="appreciation">Appreciation %:</label>
-        <input type="range" id="appreciation" min="-4" max="16" step="1" value="6">
-        <div id="appreciationValue">6%</div>
+        <input type="range" id="appreciation" min="-4" max="16" step="1">
+        <div id="appreciationValue">%</div>
         
         <label for="holdingPeriod">Holding Period:</label>
-        <input type="range" id="holdingPeriod" min="0" max="360" step="1" value="0">
-        <div id="holdingPeriodValue">0 Years, 0 Months</div>
-        
-        <label for="rent">Rent:</label>
-        <input type="range" id="rent" min="0" max="4000" step="100" value="2000">
-        <div id="rentValue">$2000</div>
-    </div>
+        <input type="range" id="holdingPeriod" min="0" max="360" step="1">
+        <div id="holdingPeriodValue"></div>
 
+        <label for="rent">Rent:</label>
+        <input type="range" id="rent" step="100">
+        <div id="rentValue">$</div>
+    </div>
 
     <script>
         const data = <?php echo json_encode($data); ?>;
@@ -164,45 +164,77 @@ if (isset($_GET['json'])) {
         projectDropdown.trigger('change');
 
         $(document).ready(function() {
-            console.log("Document is ready");  // Debug line
+            console.log("Document is ready");
 
             // Fetch data from the PHP backend
             $.get('http://localhost/incomeprops/condoapp/roi_model.php?json=true', function(cashflows) {
-                console.log("Received cashflows: ", cashflows);  // Debug line
+            console.log("Received cashflows: ", cashflows);
 
-                const occupancyIndex = cashflows[0].occupancy_index;
-                const rentArray = JSON.parse(cashflows[0].rent);
-                const initialRent = rentArray[occupancyIndex];
+            const occupancyIndex = cashflows[0].occupancy_index;
+            const rentArray = cashflows[0].rent;
+            const initialRent = rentArray[occupancyIndex];
 
-                console.log("Occupancy Index: ", occupancyIndex);  // Debug line
-                console.log("Initial Rent: ", initialRent);  // Debug line
+            console.log("Occupancy Index: ", occupancyIndex);
+            console.log("Initial Rent: ", Math.round(initialRent / 100) * 100);
 
-                // Initialize sliders based on database values
-                $('#holdingPeriod').val(occupancyIndex);
-                $('#rent').attr('min', initialRent * 0.5);
-                $('#rent').attr('max', initialRent * 2);
-                $('#rent').val(initialRent);
-                $('#rentValue').text('$' + initialRent);
+            // Calculate minimum rent as half of initialRent, rounded down to nearest hundred
 
-                // Event listener for sliders
-                $('#holdingPeriod, #appreciation, #rent').on('input', function() {
-                    const holdingPeriod = $('#holdingPeriod').val();
-                    const appreciation = $('#appreciation').val();
-                    const rent = $('#rent').val();
+            // Initialize sliders based on database values
+            $('#holdingPeriod').attr('min', occupancyIndex);
+            $('#holdingPeriod').attr('max', 360);
+            $('#holdingPeriod').attr('step', 12);
+            $('#holdingPeriod').val(occupancyIndex);
+            $('#rent').attr('min', Math.round(initialRent * 0.5 / 100) * 100);
+            $('#rent').attr('max', Math.round(initialRent * 1.5 / 100) * 100);
+            $('#rent').attr('step', 100); // Ensure this step value aligns with your initialRent
+            $('#rent').val(Math.round(initialRent / 100) * 100);
+            console.log("Rent slider initial value set to: ", $('#rent').val());
+            $('#rentValue').text('$' + Math.round(initialRent / 100) * 100);
+            console.log("Rent text initial value set to: ", $('#rentValue').text());
+            $('#appreciation').attr('min', -4);
+            $('#appreciation').attr('max', 16);
+            $('#appreciation').val(6); // Set default value for appreciation
+            $('#appreciationValue').text('6%'); // Set default value for appreciation
 
-                    console.log("Slider Values - Holding Period: ", holdingPeriod, " Appreciation: ", appreciation, " Rent: ", rent);  // Debug line
+            // Set initial values for holding period and dates derived from it
+            updateHoldingPeriodValues(occupancyIndex, cashflows);
 
-                    // Update the displayed values
-                    $('#appreciationValue').text(appreciation + '%');
-                    const years = Math.floor(holdingPeriod / 12);
-                    const months = holdingPeriod % 12;
-                    $('#holdingPeriodValue').text(years + ' Years, ' + months + ' Months');
-                    $('#rentValue').text('$' + rent);
-                });
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-                console.log("AJAX request failed: ", textStatus, errorThrown);  // Debug line
+            // Unhide the entire page content after it's fully prepared
+            $('body').show();
+
+            // Event listener for sliders
+            $('#holdingPeriod, #appreciation, #rent').on('input', function() {
+                const holdingPeriod = $('#holdingPeriod').val();
+                const appreciation = $('#appreciation').val();
+                let rent = $('#rent').val(); 
+
+                // Now 'rent' represents the current slider value and can be used to update the display
+                $('#rentValue').text('$' + rent);
+
+                console.log("Slider Values - Holding Period: ", holdingPeriod, " Appreciation: ", appreciation, " Rent: ", rent);
+
+                // Update the displayed values for Appreciation and Rent
+                $('#appreciationValue').text(appreciation + '%');
+                $('#rentValue').text('$' + rent);
+
+                // Update values based on holding period
+                updateHoldingPeriodValues(holdingPeriod, cashflows);
             });
+
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            console.log("AJAX request failed: ", textStatus, errorThrown);
+            // Consider showing an error message or handling the failure
         });
+        });
+
+        function updateHoldingPeriodValues(holdingPeriod, cashflows) {
+            if (holdingPeriod == cashflows[0].occupancy_index) {
+                $('#holdingPeriodValue').text('At occupancy');
+            } else {
+                const yearsPostOccupancy = Math.floor((holdingPeriod - cashflows[0].occupancy_index) / 12);
+                $('#holdingPeriodValue').text(yearsPostOccupancy + ' years post-occupancy');
+            }
+        }
     </script>
 
 </body>
