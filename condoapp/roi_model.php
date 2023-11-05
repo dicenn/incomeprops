@@ -6,21 +6,9 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Function to get distinct projects, models, and units
-function getDistinctProjectModelUnit() {
-    global $conn;
-    $query = "SELECT DISTINCT project, model, unit FROM condo_app.precon_cashflows_20231021_v8";
-    $result = mysqli_query($conn, $query);
-    $data = [];
-    while ($row = mysqli_fetch_assoc($result)) {
-        $data[] = $row;
-    }
-    return $data;
-}
-
 function getData() {
     global $conn;
-    $query = "SELECT * FROM condo_app.precon_cashflows_20231021_v8";
+    $query = "SELECT * FROM condo_app.precon_cashflows_20231102_v10";
     $result = mysqli_query($conn, $query);
     $cashflows = [];
     while ($row = mysqli_fetch_assoc($result)) {
@@ -41,7 +29,6 @@ function getData() {
 }
 
 // Fetch the distinct projects, models, and units
-$data = getDistinctProjectModelUnit();
 $cashflows = getData();
 
 if (isset($_GET['json'])) {
@@ -55,7 +42,6 @@ if (isset($_GET['json'])) {
     }
     exit();
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -68,38 +54,19 @@ if (isset($_GET['json'])) {
 
     <h1>Investment Metrics</h1>
 
-    <!-- Dropdowns for Project, Model, and Unit -->
-    <div>
-        <label for="project">Select Project:</label>
-        <select id="project">
-            <!-- Options will be populated dynamically -->
-        </select>
-    </div>
-
-    <div>
-        <label for="model">Select Model:</label>
-        <select id="model">
-            <!-- Options will be populated dynamically -->
-        </select>
-    </div>
-
-    <div>
-        <label for="unit">Select Unit:</label>
-        <select id="unit">
-            <!-- Options will be populated dynamically -->
-        </select>
-    </div>
+    <!-- Include the dropdowns file -->
+    <?php include 'roi_model_selector.php'; ?>
 
     <!-- Investment Metrics -->
     <div id="metrics">
-        <h2>Investment Metrics</h2>
-        <p>IRR: <span id="irr">0%</span></p>
-        <p>Cash-on-Cash: <span id="cashOnCash">0%</span></p>
+        <!-- <h2>Investment Metrics</h2> -->
+        <p>Annualized return (IRR): <span id="irr">0%</span></p>
+        <!-- <p>Cash-on-Cash: <span id="cashOnCash">0%</span></p>
         <p>NOI: <span id="noi">$0</span></p>
         <p>Monthly Rent: <span id="monthlyRent">$0</span></p>
         <p>Monthly Net Income: <span id="monthlyNetIncome">$0</span></p>
         <p>Cap Rate: <span id="capRate">0%</span></p>
-        <p>Total Investment: <span id="totalInvestment">$0</span></p>
+        <p>Total Investment: <span id="totalInvestment">$0</span></p> -->
     </div>
 
     <!-- Value Sliders -->
@@ -111,7 +78,7 @@ if (isset($_GET['json'])) {
         <div id="appreciationValue">%</div>
         
         <label for="holdingPeriod">Holding Period:</label>
-        <input type="range" id="holdingPeriod" min="0" max="360" step="1">
+        <input type="range" id="holdingPeriod" min="0" max="120" step="1">
         <div id="holdingPeriodValue"></div>
 
         <label for="rent">Rent:</label>
@@ -120,48 +87,6 @@ if (isset($_GET['json'])) {
     </div>
 
     <script>
-        const data = <?php echo json_encode($data); ?>;
-
-        const projectDropdown = $('#project');
-        const modelDropdown = $('#model');
-        const unitDropdown = $('#unit');
-
-        // Populate the project dropdown initially
-        const projects = [...new Set(data.map(item => item.project))];
-        projects.forEach(project => {
-            projectDropdown.append(new Option(project, project));
-        });
-
-        // Event listener for project dropdown change
-        projectDropdown.change(function() {
-            const selectedProject = $(this).val();
-
-            // Filter models based on the selected project
-            const filteredModels = [...new Set(data.filter(item => item.project === selectedProject).map(item => item.model))];
-            modelDropdown.empty();
-            filteredModels.forEach(model => {
-                modelDropdown.append(new Option(model, model));
-            });
-
-            // Trigger a change event to update the unit dropdown
-            modelDropdown.trigger('change');
-        });
-
-        // Event listener for model dropdown change
-        modelDropdown.change(function() {
-            const selectedProject = projectDropdown.val();
-            const selectedModel = $(this).val();
-
-            // Filter units based on the selected project and model
-            const filteredUnits = [...new Set(data.filter(item => item.project === selectedProject && item.model === selectedModel).map(item => item.unit))];
-            unitDropdown.empty();
-            filteredUnits.forEach(unit => {
-                unitDropdown.append(new Option(unit, unit));
-            });
-        });
-
-        // Trigger an initial change event to populate the model and unit dropdowns
-        projectDropdown.trigger('change');
 
         $(document).ready(function() {
             console.log("Document is ready");
@@ -172,7 +97,7 @@ if (isset($_GET['json'])) {
 
             const occupancyIndex = cashflows[0].occupancy_index;
             const rentArray = cashflows[0].rent;
-            const initialRent = rentArray[occupancyIndex];
+            const initialRent = rentArray[occupancyIndex + 2];
 
             console.log("Occupancy Index: ", occupancyIndex);
             console.log("Initial Rent: ", Math.round(initialRent / 100) * 100);
@@ -202,6 +127,23 @@ if (isset($_GET['json'])) {
             // Unhide the entire page content after it's fully prepared
             $('body').show();
 
+            // Assuming cashflows, holdingPeriod are available in your script
+            console.log("Deposits: ", cashflows[0].deposits);
+            console.log("Closing Costs: ", cashflows[0].closing_costs);
+            console.log("Mortgage Payments: ", cashflows[0].mortgage_payment);
+            console.log("Rental Net Income: ", cashflows[0].rental_net_income);
+            console.log("Holding Period: ", parseInt($('#holdingPeriod').val()) + 1);
+
+            let netCashFlows = calculateNetCashFlows(cashflows[0].deposits, cashflows[0].closing_costs, cashflows[0].mortgage_payment, cashflows[0].rental_net_income, parseInt($('#holdingPeriod').val()) + 3, parseInt($('#appreciation').val()) / 100 , cashflows[0].mortgage_principal, cashflows[0].price, cashflows[0].selling_costs, cashflows[0].mortgage_payments_year);
+
+            let correspondingDatesArray = cashflows[0].corresponding_date.slice(0, parseInt($('#holdingPeriod').val()) + 3);
+            let correspondingDates = correspondingDatesArray.map(dateStr => new Date(dateStr));
+
+            let xirr = calculateXIRR(netCashFlows, correspondingDates)
+            console.log(netCashFlows);
+            console.log(xirr);
+            document.getElementById('irr').textContent = (xirr).toFixed(1) + '%';
+            
             // Event listener for sliders
             $('#holdingPeriod, #appreciation, #rent').on('input', function() {
                 const holdingPeriod = $('#holdingPeriod').val();
@@ -219,6 +161,15 @@ if (isset($_GET['json'])) {
 
                 // Update values based on holding period
                 updateHoldingPeriodValues(holdingPeriod, cashflows);
+                netCashFlows = calculateNetCashFlows(cashflows[0].deposits, cashflows[0].closing_costs, cashflows[0].mortgage_payment, cashflows[0].rental_net_income, parseInt($('#holdingPeriod').val()) + 3, parseInt($('#appreciation').val()) / 100 , cashflows[0].mortgage_principal, cashflows[0].price, cashflows[0].selling_costs, cashflows[0].mortgage_payments_year);
+
+                correspondingDatesArray = cashflows[0].corresponding_date.slice(0, parseInt($('#holdingPeriod').val()) + 3);
+                correspondingDates = correspondingDatesArray.map(dateStr => new Date(dateStr));
+
+                xirr = calculateXIRR(netCashFlows, correspondingDates)
+                console.log(netCashFlows);
+                console.log(xirr);
+                document.getElementById('irr').textContent = (xirr).toFixed(1) + '%';
             });
 
         }).fail(function(jqXHR, textStatus, errorThrown) {
@@ -235,7 +186,79 @@ if (isset($_GET['json'])) {
                 $('#holdingPeriodValue').text(yearsPostOccupancy + ' years post-occupancy');
             }
         }
+
+        function calculateNetCashFlows(deposits, closingCosts, mortgagePayments, rentalNetIncome, holdingPeriod, appreciationRate, mortgagePrincipal, price, selling_costs, mortgage_payments_year) {
+            let netCashFlows = [];
+            console.log("Initial netCashFlows length:", netCashFlows.length); // Should always be 0
+
+            for (let i = 0; i < holdingPeriod; i++) {
+                let netCashFlow = -(deposits[i] || 0) - (closingCosts[i] || 0) - (mortgagePayments[i] || 0) + (rentalNetIncome[i] || 0);
+                netCashFlows.push(netCashFlow);
+                console.log(`Period ${i+1}: Net Cash Flow = ${netCashFlow}`);
+            }
+
+            console.log("netCashFlows length after loop:", netCashFlows.length); // Check length after filling the array
+
+        
+            console.log("price: ", price, typeof price)
+            console.log("appreciationRate: ", appreciationRate, typeof appreciationRate)
+            console.log("holdingPeriod: ", holdingPeriod, typeof holdingPeriod)            
+
+            // 1. Calculate the sale price of the property at the end of the holding period
+            const salePrice = price * Math.pow((1 + appreciationRate / mortgage_payments_year), holdingPeriod);
+            console.log("salePrice: ", salePrice, typeof salePrice)
+
+            // 2. Calculate the selling costs
+            console.log("selling_costs: ", selling_costs, typeof salePrice)
+            const sellingCosts = salePrice * selling_costs;
+            console.log("sellingCosts: ", sellingCosts)
+
+            // 3. Calculate the amount remaining on the mortgage
+            // Assuming the holding_period is less than the length of the deposits and mortgage_principal arrays
+            const depositsSum = deposits.slice(0, holdingPeriod + 1).reduce((a, b) => a + b, 0);
+            const principalSum = mortgagePrincipal.slice(0, holdingPeriod).reduce((a, b) => a + b, 0);
+            const mortgageRemaining = (price - depositsSum) - principalSum;
+
+            console.log("depositsSum: ", depositsSum, typeof depositsSum)
+            console.log("principalSum: ", principalSum, typeof principalSum)
+            console.log("mortgageRemaining: ", mortgageRemaining, typeof mortgageRemaining)
+
+            const last_cashflow_addition = (salePrice - sellingCosts - mortgageRemaining)
+            console.log("last_cashflow_addition: ", last_cashflow_addition, typeof last_cashflow_addition)
+
+            console.log("netCashFlows.length: ", netCashFlows.length, typeof netCashFlows.length)
+            console.log("holdingPeriod: ", holdingPeriod, typeof holdingPeriod)
+
+            console.log("pre-lastcashflow: ", netCashFlows[holdingPeriod - 1], typeof netCashFlows[holdingPeriod - 1])
+            netCashFlows[holdingPeriod - 1] += last_cashflow_addition;
+            console.log("lastCashFlow: ", netCashFlows[holdingPeriod - 1])
+
+            console.log("Final netCashFlows length:", netCashFlows.length); // Final check before returning
+        
+            return netCashFlows;
+        }
+
+        // First, make sure to have finance.js included in your project.
+        // You can include it via a <script> tag in your HTML or by installing it via npm if you're using Node.js.
+
+        function calculateXIRR(netCashFlows, correspondingDateStrings) {
+        // Convert the date strings to Date objects
+        let correspondingDates = correspondingDateStrings.map(dateString => new Date(dateString));
+
+        // Assuming finance.js is included and Finance is available in the global scope
+        let finance = new Finance();
+
+        // Calculate XIRR
+        // The XIRR function in finance.js expects the dates to be passed as actual Date objects, not strings
+        let xirrValue = finance.XIRR(netCashFlows, correspondingDates);
+
+        // Return the XIRR result
+        return xirrValue;
+        }
+
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/financejs@4.1.0/finance.js"></script>
 
 </body>
 </html>
