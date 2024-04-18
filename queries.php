@@ -7,7 +7,7 @@ function getProperties($num_units = "all", $min_price = null, $max_price = null,
     global $conn;
     $properties = array();
 
-    $query = "SELECT * FROM income_props.toronto_duplexes_lean_v8 WHERE 1=1";
+    $query = "SELECT * FROM income_props.multifamily_20240418 where province = 'Ontario'";
 
     if (!empty($num_units) && $num_units !== "all") { $query .= " AND num_units >= '$num_units'";}
     if (!empty($min_price)) { $query .= " AND Price >= $min_price";}
@@ -45,9 +45,9 @@ function getPropertyDetails($address = null) {
     
     if ($address) {
         $address = mysqli_real_escape_string($conn, $address);
-        $query = "SELECT * FROM income_props.toronto_duplexes_lean_v8 WHERE Address = '$address'";
+        $query = "SELECT * FROM income_props.multifamily_20240418 WHERE Address = '$address'";
     } else {
-        $query = "SELECT * FROM income_props.toronto_duplexes_lean_v8 LIMIT 1";
+        $query = "SELECT * FROM income_props.multifamily_20240418 where province = 'Ontario'LIMIT 1";
     }
 
     $result = mysqli_query($conn, $query);
@@ -63,7 +63,7 @@ function getPropertyDetails($address = null) {
 
 function getAddresses() {
     global $conn;
-    $addressesQuery = "SELECT Address FROM income_props.toronto_duplexes_lean_v8";
+    $addressesQuery = "SELECT Address FROM income_props.multifamily_20240418 where province = 'Ontario'";
     $addressesResult = mysqli_query($conn, $addressesQuery);
     $addresses = mysqli_fetch_all($addressesResult, MYSQLI_ASSOC);
 
@@ -77,7 +77,7 @@ function closeConnection() {
 
 function getDistinctCities() {
     global $conn;
-    $sql = "SELECT DISTINCT city FROM income_props.toronto_duplexes_lean_v8";
+    $sql = "SELECT DISTINCT city FROM income_props.multifamily_20240418 where province = 'Ontario'";
     $result = $conn->query($sql);
     $cities = [];
     while ($row = $result->fetch_assoc()) {

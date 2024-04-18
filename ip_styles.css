@@ -597,3 +597,7 @@ body {
 .container {
     max-width: 1200px; /* or whatever value you prefer */
 }
+
+.container {
+    padding-top: 20px; /* Adjust the value based on the desired spacing */
+}

@@ -2,7 +2,7 @@
 $host = 'localhost';
 $db = 'income_props';
 $user = 'root';
-$pass = '';
+$pass = 'kfockNAVAu6.eMbbiFa3';
 $charset = 'utf8mb4';
 
 $conn = mysqli_connect($host, $user, $pass, $db);

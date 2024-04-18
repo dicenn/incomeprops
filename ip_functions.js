@@ -1,5 +1,5 @@
 const finance = new Finance();
-console.log("cash_flow_calc.js loaded");
+console.log("ip_functions.js loaded");
 
 function updateCashFlowAnalysisTable() {
     console.log("Updating Cash Flow Analysis Table...");
@@ -174,6 +174,8 @@ function generateCashFlows(holdingPeriod, netCashFlow0, netCashFlow1, netCashFlo
 
 function calculatePropertyMetrics(property) {
     let address = property.Address
+    // console.log(property.Address)
+
     let purchasePrice = parseFloat(property.Price)
     // console.log(purchasePrice)
     let downpaymentPercentage = 0.2
@@ -182,7 +184,8 @@ function calculatePropertyMetrics(property) {
                   property['1_bedroom_units'] * property['1_bedroom_rent'] + 
                   property['0_bedroom_units'] * property['0_bedroom_rent'];
     // let propertyTax = intval(preg_replace('/[,.]/', '', substr($property['Property taxes'], 1, 6)))
-    let propertyTax = parseInt(property['Property taxes'].substring(1, 7).replace(/[,.]/g, ''));
+    // console.log('property taxes: ' + property['Property_taxes'])
+    let propertyTax = property['Property_taxes'];
     let appreciationPercentage = 0.06
     let holdingPeriod = 5
     let mortgageRate = 0.06
@@ -208,8 +211,6 @@ function calculatePropertyMetrics(property) {
     let netCashFlow0 = -initialInvestment
     let netCashFlow1 = netIncome + (holdingPeriod === 1 ? proceedsFromSale : 0)
     let netCashFlowN = netIncome + proceedsFromSale
-
-
 
     let noi = monthlyRent * (1 - vacancyAllowance) * 12 - annualNonMortgageExpenses;
     let capRate = noi / purchasePrice;
@@ -251,7 +252,7 @@ function adjustColumns() {
 
     // Clear existing columns in thead
     thead.innerHTML = `<tr>
-                        <th>Item</th>
+                        <th>Cash flow analysis</th>
                         <th>Year 0</th>
                        </tr>`;
 

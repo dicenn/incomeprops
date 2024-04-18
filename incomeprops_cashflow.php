@@ -137,7 +137,7 @@
                     "purchasePrice" => ["label" => "Purchase Price ($)", "value" => $property['Price']],
                     "downpaymentPercentage" => ["label" => "Downpayment (%)", "value" => "20"],
                     "monthlyRent" => ["label" => "Monthly Rent ($)", "value" => $totalRent, "readonly" => true],
-                    "propertyTax" => ["label" => "Property Tax ($)", "value" => intval(preg_replace('/[,.]/', '', substr($property['Property taxes'], 1, 6))) , "readonly" => true],
+                    "propertyTax" => ["label" => "Property Tax ($)", "value" => $property['Property_taxes'], "readonly" => true],
                     "appreciationPercentage" => ["label" => "Appreciation (%)", "value" => "6"],
                     "holdingPeriod" => ["label" => "Holding Period (Years)", "value" => "5"],
                     "mortgageRate" => ["label" => "Mortgage Rate (%)", "value" => "6"],
@@ -454,7 +454,7 @@
                     </tr>
                     <tr>
                         <td>Building Type</td>
-                        <td><input type="text" value="<?= $property['Building type'] ?: '' ?>"></td>
+                        <td><input type="text" value="<?= $property['Building_type'] ?: '' ?>"></td>
                     </tr>
                     <tr>
                         <td>Stories</td>
@@ -462,15 +462,15 @@
                     </tr>
                     <tr>
                         <td>Community Name</td>
-                        <td><input type="text" value="<?= $property['Community name'] ?: '' ?>"></td>
+                        <td><input type="text" value="<?= $property['Community_name'] ?: '' ?>"></td>
                     </tr>
                     <tr>
                         <td>Property Taxes</td>
-                        <td><input type="text" value="<?= $property['Property taxes'] ?: '' ?>"></td>
+                        <td><input type="text" value="<?= $property['Property_taxes'] ?: '' ?>"></td>
                     </tr>
                     <tr>
                         <td>Lot Size</td>
-                        <td><input type="text" value="<?= $property['Lot size'] ?: '' ?>"></td>
+                        <td><input type="text" value="<?= $property['Lot_size'] ?: '' ?>"></td>
                     </tr>
                     <tr>
                         <td>Number of Units</td>
