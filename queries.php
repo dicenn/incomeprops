@@ -7,33 +7,25 @@ function getProperties($num_units = "all", $min_price = null, $max_price = null,
     global $conn;
     $properties = array();
 
-    $query = "SELECT * FROM income_props.multifamily_20240418 where province = 'Ontario'";
+    $query = "SELECT * FROM income_props.multifamily_20240418 WHERE province = 'Ontario'";
 
-    if (!empty($num_units) && $num_units !== "all") { $query .= " AND num_units >= '$num_units'";}
-    if (!empty($min_price)) { $query .= " AND Price >= $min_price";}
-    if (!empty($max_price)) {$query .= " AND Price <= $max_price";}
-    if (!empty($city) && strtolower($city) !== "all") {$query .= " AND city = '$city'";}
+    if (!empty($num_units) && $num_units !== "all") { $query .= " AND num_units >= :num_units";}
+    if (!empty($min_price)) { $query .= " AND Price >= :min_price";}
+    if (!empty($max_price)) { $query .= " AND Price <= :max_price";}
+    if (!empty($city) && strtolower($city) !== "all") { $query .= " AND city = :city";}
 
     $sort = isset($_POST['sort']) ? $_POST['sort'] : null;
-    
-    // if ($sort) {
-    //     switch ($sort) {
-    //         case 'price_high_low': $query .= " ORDER BY Price DESC"; break;
-    //         case 'price_low_high': $query .= " ORDER BY Price ASC"; break;
-    //         // case 'return_high_low': $query .= " ORDER BY annual_return DESC"; break;
-    //         // case 'return_low_high': $query .= " ORDER BY annual_return ASC"; break;
-    //     }
-    // }    
 
-    // echo $query;
+    // Prepare and execute the query
+    $stmt = $conn->prepare($query);
+    if (!empty($num_units) && $num_units !== "all") { $stmt->bindParam(':num_units', $num_units, PDO::PARAM_INT);}
+    if (!empty($min_price)) { $stmt->bindParam(':min_price', $min_price, PDO::PARAM_INT);}
+    if (!empty($max_price)) { $stmt->bindParam(':max_price', $max_price, PDO::PARAM_INT);}
+    if (!empty($city) && strtolower($city) !== "all") { $stmt->bindParam(':city', $city, PDO::PARAM_STR);}
 
-    $result = mysqli_query($conn, $query);
+    $stmt->execute();
 
-    if (!$result) {
-        die("Query failed: " . mysqli_error($conn));
-    }
-
-    while ($row = mysqli_fetch_assoc($result)) {
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $properties[] = $row;
     }
 
@@ -44,46 +36,44 @@ function getPropertyDetails($address = null) {
     global $conn;
     
     if ($address) {
-        $address = mysqli_real_escape_string($conn, $address);
-        $query = "SELECT * FROM income_props.multifamily_20240418 WHERE Address = '$address'";
+        $query = "SELECT * FROM income_props.multifamily_20240418 WHERE Address = :address";
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':address', $address, PDO::PARAM_STR);
     } else {
-        $query = "SELECT * FROM income_props.multifamily_20240418 where province = 'Ontario'LIMIT 1";
+        $query = "SELECT * FROM income_props.multifamily_20240418 WHERE province = 'Ontario' LIMIT 1";
+        $stmt = $conn->prepare($query);
     }
 
-    $result = mysqli_query($conn, $query);
-
-    if (!$result) {
-        die("Query failed: " . mysqli_error($conn));
-    }
-
-    $property = mysqli_fetch_assoc($result);
+    $stmt->execute();
+    $property = $stmt->fetch(PDO::FETCH_ASSOC);
 
     return $property;
 }
 
 function getAddresses() {
     global $conn;
-    $addressesQuery = "SELECT Address FROM income_props.multifamily_20240418 where province = 'Ontario'";
-    $addressesResult = mysqli_query($conn, $addressesQuery);
-    $addresses = mysqli_fetch_all($addressesResult, MYSQLI_ASSOC);
+    $addressesQuery = "SELECT Address FROM income_props.multifamily_20240418 WHERE province = 'Ontario'";
+    $stmt = $conn->prepare($addressesQuery);
+    $stmt->execute();
+    $addresses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     return $addresses;
 }
 
 function closeConnection() {
     global $conn;
-    mysqli_close($conn);
+    $conn = null;
 }
 
 function getDistinctCities() {
     global $conn;
-    $sql = "SELECT DISTINCT city FROM income_props.multifamily_20240418 where province = 'Ontario'";
-    $result = $conn->query($sql);
+    $sql = "SELECT DISTINCT city FROM income_props.multifamily_20240418 WHERE province = 'Ontario'";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
     $cities = [];
-    while ($row = $result->fetch_assoc()) {
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $cities[] = $row['city'];
     }
     return $cities;
 }
-
 ?>
